@@ -27,6 +27,7 @@
 (defmacro forever [ & body ]
   `(while true ~@body))
 
+; Prints message of the day on start-up.
 (defn print-motd []
   (print "
 
@@ -51,5 +52,6 @@
    (flush)
    (println (read-line))))
 
+; Main function.
 (defn -main [ & args ]  
   (repl))

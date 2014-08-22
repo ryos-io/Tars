@@ -20,42 +20,11 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns com.bagdemir.moo.console
+(ns com.bagdemir.moo.commands
   (:gen-class))
 
-; Macro definition of infinite loop for REPL. 
-(defmacro forever [ & body ]
-  `(while true ~@body))
-
-; Prints message of the day on start-up.
-(defn print-motd []
-  (print "
-
-           (    )
-            (oo)
-   )\\.-----/(O O)
-  # ;       / u
-    (  .   |} )
-     |/ `.;|/;     Moo version 0.0.1 [ Type 'help' to get help! ]
-     \"     \" \"     https://github.com/mooito/moo 
-
-")
-  (flush))
-
-; REPL implementation.
-(defn repl
-  "Read-Eval-Print-Loop implementation"
-  []
-  (print-motd)
-  
-  (loop []
-    (print "moo> ")
-    (flush)
-    (let [user-input (read-line)]
-      (println user-input)
-      (flush)
-      (if (not= user-input "quit") 
-        (recur))
-      )))
-  
-
+(defprotocol Command 
+  (on-start [ self ]  "")
+  (on-error [ self, error-handler ] "")
+  (perform [ self, action ] "")
+  (on-complete [ self ] "")) 

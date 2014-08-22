@@ -21,7 +21,9 @@
 ; THE SOFTWARE.
 
 (ns com.bagdemir.moo.console
-  (:gen-class))
+  (:gen-class)
+  (:use com.bagdemir.moo.commands)
+  (:import [com.bagdemir.moo.commands CommandTemplate]))
 
 ; Macro definition of infinite loop for REPL. 
 (defmacro forever [ & body ]
@@ -47,15 +49,13 @@
   "Read-Eval-Print-Loop implementation"
   []
   (print-motd)
-  
   (loop []
     (print "moo> ")
     (flush)
-    (let [user-input (read-line)]
-      (println user-input)
-      (flush)
-      (if (not= user-input "quit") 
-        (recur))
-      )))
-  
-
+    (let [ user-input (read-line) ]
+      (if (or 
+           (and 
+            (not  (clojure.string/blank? user-input))
+            (not= (perform (CommandTemplate.) user-input) :TERMINATE))
+           (clojure.string/blank? user-input))
+        (recur)))))

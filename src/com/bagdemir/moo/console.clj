@@ -56,6 +56,6 @@
       (if (or 
            (and 
             (not  (clojure.string/blank? user-input))
-            (not= (perform (CommandTemplate.) user-input) :TERMINATE))
+            (not= (perform (CommandTemplate.) user-input "") :TERMINATE))
            (clojure.string/blank? user-input))
         (recur)))))

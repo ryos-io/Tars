@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ; 
-; Copyright (c) 2014 Erhan Bagdemir
+; Copyright (c) 2014 mooito.org - Erhan Bagdemir
 ; 
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,7 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns com.bagdemir.moo.commands
+(ns org.mooito.moo.commands
   (:gen-class))
 
 (def command-map 

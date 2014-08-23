@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ; 
-; Copyright (c) 2014 Erhan Bagdemir
+; Copyright (c) 2014 mooito.org - Erhan Bagdemir
 ; 
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,42 +20,10 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns com.bagdemir.moo.console
-  (:gen-class)
-  (:use com.bagdemir.moo.commands)
-  (:import [com.bagdemir.moo.commands CommandTemplate]))
+(ns org.mooito.moo.container
+  (:use org.mooito.moo.console)
+  (:gen-class))
 
-; Macro definition of infinite loop for REPL. 
-(defmacro forever [ & body ]
-  `(while true ~@body))
+(defn -main [ & args ]  
+  (repl))
 
-; Prints message of the day on start-up.
-(defn print-motd []
-  (print "
-
-           (    )
-            (oo)
-   )\\.-----/(O O)
-  # ;       / u
-    (  .   |} )
-     |/ `.;|/;     Moo version 0.0.1 [ Type 'help' to get help! ]
-     \"     \" \"     https://github.com/mooito/moo 
-
-")
-  (flush))
-
-; REPL implementation.
-(defn repl
-  "Read-Eval-Print-Loop implementation"
-  []
-  (print-motd)
-  (loop []
-    (print "moo> ")
-    (flush)
-    (let [ user-input (read-line) ]
-      (if (or 
-           (and 
-            (not  (clojure.string/blank? user-input))
-            (not= (perform (CommandTemplate.) user-input "") :TERMINATE))
-           (clojure.string/blank? user-input))
-        (recur)))))

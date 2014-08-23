@@ -23,39 +23,57 @@
 (ns org.mooito.moo.console
   (:gen-class)
   (:use org.mooito.moo.commands)
+  (:require clojure.string)
   (:import [org.mooito.moo.commands CommandTemplate]))
 
-; Macro definition of infinite loop for REPL. 
+;; Macro definition of infinite loop for REPL. 
 (defmacro forever [ & body ]
   `(while true ~@body))
 
-; Prints message of the day on start-up.
+;; Prints message of the day on start-up.
 (defn print-motd []
   (print "
-
            (    )
             (oo)
    )\\.-----/(O O)
   # ;       / u
     (  .   |} )
      |/ `.;|/;     Moo version 0.0.1 [ Type 'help' to get help! ]
-     \"     \" \"     https://github.com/mooito/moo 
+     \"     \" \"     https://github.com/mooito/moo
 
 ")
   (flush))
 
-; REPL implementation.
+(defn split-parameters 
+  "Split parameters in form of command and parameters"
+  [input]
+  (if (not (clojure.string/blank? input))
+    (clojure.string/split input #"\s" 2)
+    ""))
+
+(defn print-prompt 
+  "Prints the command prompt."
+  []
+  (print "moo> ")
+  (flush))
+
+;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
   []
   (print-motd)
   (loop []
-    (print "moo> ")
-    (flush)
-    (let [ user-input (read-line) ]
+    (print-prompt)
+    (let [ user-input (read-line), input-token (split-parameters user-input)]
       (if (or 
            (and 
-            (not  (clojure.string/blank? user-input))
-            (not= (perform (CommandTemplate.) user-input "") :TERMINATE))
+            (not 
+             (clojure.string/blank? user-input))
+            (not= 
+             (perform 
+              (CommandTemplate.) 
+              (first input-token) 
+              (rest input-token)) 
+             :TERMINATE))
            (clojure.string/blank? user-input))
         (recur)))))

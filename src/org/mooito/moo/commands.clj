@@ -57,9 +57,11 @@
 (defmethod on-start "help" [ params ])
 (defmethod on-error "help" [ params ]
   (println "help failed!"))
-(defmethod exec "help" [ params ])
+(defmethod exec "help" [ params ]
+  (println params))
+
 (defmethod on-complete "help" [ params ]
-  (println "Bye!")
+  (println params)
   (:console-action (get command-map "quit")))
 
 ; default command implementations

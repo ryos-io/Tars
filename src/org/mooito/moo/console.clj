@@ -73,7 +73,7 @@
              (perform 
               (CommandTemplate.) 
               (first input-token) 
-              (rest input-token)) 
+              (get input-token 1)) 
              :TERMINATE))
            (clojure.string/blank? user-input))
         (recur)))))

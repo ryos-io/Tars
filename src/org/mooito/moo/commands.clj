@@ -41,31 +41,31 @@
 (defmulti on-start identity-func)
 (defmulti on-error identity-func)
 (defmulti on-complete identity-func)
-(defmulti exec identity-func)
+(defmulti exec (fn [command param] command))
 
 ; 'quit' command implementation.
 (defmethod on-start "quit" [ params ])
 (defmethod on-error "quit" [ params ]
   (println "quit failed!"))
-
-(defmethod exec "quit" [ params ])
+(defmethod exec "quit" [ commands params ])
 (defmethod on-complete "quit" [ params ]
   (println "Bye!")
   (:console-action (get command-map "quit")))
 
-; 'help' command implementation
+;; 'help' command implementation
 (defmethod on-start "help" [ params ])
 (defmethod on-error "help" [ params ]
   (println "help failed!"))
-(defmethod exec "help" [ params ]
-  (println params))
-
+(defmethod exec "help" [ command params ]
+  (let [desc (:desc (get command-map params))]
+    (if (clojure.string/blank? desc)
+      (println (str "Help not found for: '" params "'"))
+      (println desc))))
 (defmethod on-complete "help" [ params ]
-  (println params)
-  (:console-action (get command-map "quit")))
+  (:console-action (get command-map "help")))
 
-; default command implementations
-(defmethod exec :default [ params ])
+;; default command implementations
+(defmethod exec :default [ command params ])
 (defmethod on-start :default [ params ])
 (defmethod on-error :default [ params ])
 (defmethod on-complete :default [ params ]
@@ -77,6 +77,6 @@
   (perform [ self, command, params ]
     (try
       (on-start command)
-      (exec params)
+      (exec command params)
       (catch Exception e (on-error command e)))
     (on-complete command)))

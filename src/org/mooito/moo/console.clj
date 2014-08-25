@@ -24,6 +24,7 @@
   (:gen-class)
   (:use org.mooito.moo.commands)
   (:require clojure.string)
+  (:use org.mooito.moo.os.stty)
   (:import [org.mooito.moo.commands CommandTemplate]))
 
 ;; Macro definition of infinite loop for REPL. 
@@ -47,6 +48,7 @@
 (defn split-parameters 
   "Split parameters in form of command and parameters"
   [input]
+  (if (= input \u2191) (println "up"))
   (if (not (clojure.string/blank? input))
     (clojure.string/split input #"\s" 2)
     ""))
@@ -57,23 +59,34 @@
   (print "moo> ")
   (flush))
 
+(defn eval-command
+  [user-input]
+      
+
+)
+
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
   []
+  (turn-char-buffering-on)
   (print-motd)
-  (loop []
-    (print-prompt)
-    (let [ user-input (read-line), input-token (split-parameters user-input)]
-      (if (or 
-           (and 
-            (not 
-             (clojure.string/blank? user-input))
-            (not= 
-             (perform 
-              (CommandTemplate.) 
-              (first input-token) 
-              (get input-token 1)) 
-             :TERMINATE))
-           (clojure.string/blank? user-input))
-        (recur)))))
+  (print-prompt)
+  (loop [command-buffer nil]
+    (let [input-char (.read System/in)]
+      (cond  
+       (= input-char 10) ;; enter pressed
+       (let [ input-token (split-parameters command-buffer) ]
+         (print "\n")          
+         (if 
+             (or 
+              (clojure.string/blank? command-buffer)
+              (not= (perform  (CommandTemplate.) (first input-token) (get input-token 1)) :TERMINATE))
+           (do (print-prompt) (recur nil))))
+       ;; default case
+       :else
+       (do
+         (print (char input-char))
+         (flush)
+         (recur (str command-buffer (char input-char)))))))
+  )

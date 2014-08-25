@@ -56,11 +56,13 @@
 (defmethod on-start "help" [ params ])
 (defmethod on-error "help" [ params ]
   (println "help failed!"))
+
 (defmethod exec "help" [ command params ]
   (let [desc (:desc (get command-map params))]
     (if (clojure.string/blank? desc)
       (println (str "Help not found for: '" params "'"))
       (println desc))))
+
 (defmethod on-complete "help" [ params ]
   (:console-action (get command-map "help")))
 

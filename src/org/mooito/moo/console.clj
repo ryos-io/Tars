@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ; 
-; Copyright (c) 2014 Erhan Bagdemir
+; Copyright (c) 2014 mooito.org - Erhan Bagdemir
 ; 
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,37 +20,60 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns com.bagdemir.moo.console
-  (:gen-class))
+(ns org.mooito.moo.console
+  (:gen-class)
+  (:use org.mooito.moo.commands)
+  (:require clojure.string)
+  (:import [org.mooito.moo.commands CommandTemplate]))
 
-; Macro definition of infinite loop for REPL. 
+;; Macro definition of infinite loop for REPL. 
 (defmacro forever [ & body ]
   `(while true ~@body))
 
-; Message of the day and branding.
+;; Prints message of the day on start-up.
 (defn print-motd []
   (print "
-
            (    )
             (oo)
    )\\.-----/(O O)
   # ;       / u
     (  .   |} )
      |/ `.;|/;     Moo version 0.0.1 [ Type 'help' to get help! ]
-     \"     \" \"     Command line endpoint client 
+     \"     \" \"     https://github.com/mooito/moo
 
 ")
   (flush))
 
-; REPL implementation.
+(defn split-parameters 
+  "Split parameters in form of command and parameters"
+  [input]
+  (if (not (clojure.string/blank? input))
+    (clojure.string/split input #"\s" 2)
+    ""))
+
+(defn print-prompt 
+  "Prints the command prompt."
+  []
+  (print "moo> ")
+  (flush))
+
+;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
   []
   (print-motd)
-  (forever
-   (print "moo> ")
-   (flush)
-   (println (read-line))))
-
-(defn -main [ & args ]  
-  (repl))
+  (loop []
+    (print-prompt)
+    (let [ user-input (read-line), input-token (split-parameters user-input)]
+      (if (or 
+           (and 
+            (not 
+             (clojure.string/blank? user-input))
+            (not= 
+             (perform 
+              (CommandTemplate.) 
+              (first input-token) 
+              (get input-token 1)) 
+             :TERMINATE))
+           (clojure.string/blank? user-input))
+        (recur)))))

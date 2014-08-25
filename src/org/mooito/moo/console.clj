@@ -88,5 +88,4 @@
        (do
          (print (char input-char))
          (flush)
-         (recur (str command-buffer (char input-char)))))))
-  )
+         (recur (str command-buffer (char input-char))))))))

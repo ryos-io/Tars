@@ -77,6 +77,11 @@
               (clojure.string/blank? command-buffer)
               (not= (perform  (CommandTemplate.) (first input-token) (get input-token 1)) :TERMINATE))
            (do (print-prompt) (recur nil))))
+       (= input-char 127)
+       (do
+         (print "\b \b")
+         (flush)
+         (recur command-buffer))
        ;; default case
        :else
        (do

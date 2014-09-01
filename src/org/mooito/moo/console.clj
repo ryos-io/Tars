@@ -59,12 +59,6 @@
   (print "moo> ")
   (flush))
 
-(defn eval-command
-  [user-input]
-      
-
-)
-
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"

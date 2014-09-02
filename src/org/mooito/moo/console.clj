@@ -67,7 +67,7 @@
   (print-motd)
   (print-prompt)
   (loop [command-buffer nil]
-    (let [input-char (.read System/in)]
+    (let [input-char (.read System/in)]     
       (cond  
        (= input-char 10) ;; enter pressed
        (let [ input-token (split-parameters command-buffer) ]
@@ -78,10 +78,12 @@
               (not= (perform  (CommandTemplate.) (first input-token) (get input-token 1)) :TERMINATE))
            (do (print-prompt) (recur nil))))
        (= input-char 127)
-       (do
-         (print "\b \b")
-         (flush)
-         (recur command-buffer))
+         (if (> (count command-buffer) 0)
+           (do
+             (print "\b \b")
+             (flush)
+             (recur (subs command-buffer 0 (- (count command-buffer) 1))))
+           (recur command-buffer))
        ;; default case
        :else
        (do

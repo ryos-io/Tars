@@ -68,8 +68,8 @@
 (defmethod exec :default [ command params ])
 (defmethod on-start :default [ params ])
 (defmethod on-error :default [ params ])
-(defmethod on-complete :default [ params ]
-  (println "Unknown command. Type 'help' to get help.")
+(defmethod on-complete :default [ command ]
+  (println (str "Unknown command '" command "'. Type 'help' to get help."))
   (flush))
 
 (deftype CommandTemplate []

@@ -23,7 +23,7 @@
 (ns org.mooito.moo.console
   (:gen-class)
   (:use org.mooito.moo.commands)
-  (:require clojure.string)
+  (:use [clojure.string :only [split, blank?]])
   (:use org.mooito.moo.os.stty)
   (:import [org.mooito.moo.commands CommandTemplate]))
 
@@ -49,8 +49,8 @@
   "Split parameters in form of command and parameters"
   [input]
   (if (= input \u2191) (println "up"))
-  (if (not (clojure.string/blank? input))
-    (clojure.string/split input #"\s" 2)
+  (if (not (blank? input))
+    (split input #"\s" 2)
     ""))
 
 (defn print-prompt 
@@ -74,20 +74,19 @@
     (let [input-char (.read System/in)]     
       (cond  
        (= input-char 10) ;; enter pressed
-       (let [ input-token (split-parameters command-buffer) ]
+       (let [input-token (split-parameters command-buffer) ]
          (print "\n")          
-         (if 
-             (or 
-              (clojure.string/blank? command-buffer)
+         (if (or 
+              (blank? command-buffer)
               (not= (perform  (CommandTemplate.) (first input-token) (get input-token 1)) :TERMINATE))
            (do (print-prompt) (recur nil))))
        (= input-char 127)
-         (if (> (count command-buffer) 0)
-           (do
-             (print "\b \b")
-             (flush)
-             (recur (remove-last command-buffer)))
-           (recur command-buffer))
+       (if (> (count command-buffer) 0)
+         (do
+           (print "\b \b")
+           (flush)
+           (recur (remove-last command-buffer)))
+         (recur command-buffer))
        ;; default case
        :else
        (do

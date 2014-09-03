@@ -48,7 +48,6 @@
 (defn split-parameters 
   "Split parameters in form of command and parameters"
   [input]
-  (if (= input \u2191) (println "up"))
   (if (not (blank? input))
     (split input #"\s" 2)
     ""))

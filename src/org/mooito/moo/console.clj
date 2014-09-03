@@ -59,6 +59,10 @@
   (print "moo> ")
   (flush))
 
+; removes last character from the string.
+(defmacro remove-last [ txt ]
+  `(subs ~txt 0 (- (count ~txt) 1)))
+
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
@@ -82,7 +86,7 @@
            (do
              (print "\b \b")
              (flush)
-             (recur (subs command-buffer 0 (- (count command-buffer) 1))))
+             (recur (remove-last command-buffer)))
            (recur command-buffer))
        ;; default case
        :else

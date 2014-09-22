@@ -20,12 +20,16 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns org.mooito.moo.os.stty
+(ns io.moo.container.os.stty
   (:gen-class)
   (:use clojure.java.shell))
 
 (defn turn-char-buffering-on
   []
-  (sh "sh" "-c" "stty -g < /dev/tty")
-  (sh "sh" "-c" "stty -icanon min 1 < /dev/tty")
-  (sh "sh" "-c" "stty -echo </dev/tty"))
+  ; (sh "sh" "-c" "stty -g < /dev/tty")
+  ; (sh "sh" "-c" "stty -icanon min 1 < /dev/tty")
+  ; (sh "sh" "-c" "stty -echo </dev/tty"))
+)
+(defn turn-char-buffering-off
+  []
+  (sh "reset"))

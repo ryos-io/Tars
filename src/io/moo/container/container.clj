@@ -20,10 +20,15 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns org.mooito.moo.container
-  (:use org.mooito.moo.console)
+(ns io.moo.container.container
+  (:use io.moo.container.console
+        io.moo.container.os.stty)
+  
   (:gen-class))
 
 (defn -main [ & args ]  
-  (repl))
-
+  (turn-char-buffering-on)
+  (print-motd)
+  (repl)
+  (turn-char-buffering-off)
+  (println "exiting"))

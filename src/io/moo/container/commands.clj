@@ -20,7 +20,7 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns org.mooito.moo.commands
+(ns io.moo.container.commands
   (:gen-class))
 
 (def command-map 
@@ -49,7 +49,8 @@
   (println "quit failed!"))
 (defmethod exec "quit" [ commands params ])
 (defmethod on-complete "quit" [ params ]
-  (println "Bye!")
+  (print "Bye!")
+  (flush)
   (:console-action (get command-map "quit")))
 
 ;; 'help' command implementation

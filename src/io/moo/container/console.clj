@@ -20,12 +20,12 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns org.mooito.moo.console
+(ns io.moo.container.console
   (:gen-class)
-  (:use org.mooito.moo.commands)
+  (:use io.moo.container.commands)
   (:use [clojure.string :only [split, blank?]])
-  (:use org.mooito.moo.os.stty)
-  (:import [org.mooito.moo.commands CommandTemplate]))
+  (:use io.moo.container.os.stty)
+  (:import [io.moo.container.commands CommandTemplate]))
 
 ;; Macro definition of infinite loop for REPL. 
 (defmacro forever [ & body ]
@@ -66,19 +66,21 @@
 (defn repl
   "Read-Eval-Print-Loop implementation"
   []
-  (turn-char-buffering-on)
-  (print-motd)
   (print-prompt)
   (loop [command-buffer nil]
     (let [input-char (.read System/in)]     
       (cond  
        (= input-char 10) ;; enter pressed
        (let [input-token (split-parameters command-buffer) ]
-         (print "\n")          
          (if (or 
               (blank? command-buffer)
-              (not= (perform  (CommandTemplate.) (first input-token) (get input-token 1)) :TERMINATE))
-           (do (print-prompt) (recur nil))))
+              (not= 
+               (perform  
+                (CommandTemplate.) 
+                (first input-token) 
+                (get input-token 1)) :TERMINATE))
+           (do (print-prompt) (recur nil))   
+           (print (char input-char))))
        (= input-char 127)
        (if (> (count command-buffer) 0)
          (do

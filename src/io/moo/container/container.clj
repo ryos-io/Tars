@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ; 
-; Copyright (c) 2014 mooito.org - Erhan Bagdemir
+; Copyright (c) 2014 moo.io - Erhan Bagdemir
 ; 
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -31,4 +31,6 @@
   (print-motd)
   (repl)
   (turn-char-buffering-off)
-  (println "exiting"))
+  ; it is required, since the process does not terminate itself.
+  ; https://github.com/mooito/moo/issues/10
+  (System/exit 0))

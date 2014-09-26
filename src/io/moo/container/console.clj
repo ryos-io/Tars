@@ -72,15 +72,18 @@
       (cond  
        (= input-char 10) ;; enter pressed
        (let [input-token (split-parameters command-buffer) ]
-         (if (or 
+         (if 
+             (or 
               (blank? command-buffer)
               (not= 
                (perform  
                 (CommandTemplate.) 
                 (first input-token) 
                 (get input-token 1)) :TERMINATE))
-           (do (print-prompt) (recur nil))   
-           (print (char input-char))))
+           (do 
+             (print (char input-char))
+             (print-prompt)
+             (recur nil))))
        (= input-char 127)
        (if (> (count command-buffer) 0)
          (do

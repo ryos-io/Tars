@@ -26,10 +26,11 @@
 
 (defn turn-char-buffering-on
   []
-  ; (sh "sh" "-c" "stty -g < /dev/tty")
-  ; (sh "sh" "-c" "stty -icanon min 1 < /dev/tty")
-  ; (sh "sh" "-c" "stty -echo </dev/tty"))
-)
+  (sh "sh" "-c" "stty -g < /dev/tty")
+  (sh "sh" "-c" "stty -icanon min 1 < /dev/tty")
+  (sh "sh" "-c" "stty -echo </dev/tty"))
+
 (defn turn-char-buffering-off
   []
-  (sh "reset"))
+  (flush)
+  (sh "sh" "-c" "reset"))

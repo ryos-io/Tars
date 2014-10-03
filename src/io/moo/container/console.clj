@@ -67,10 +67,42 @@
   "Read-Eval-Print-Loop implementation"
   []
   (print-prompt)
-  (loop [command-buffer nil]
+  (loop [command-buffer nil vertical-cursor-pos 0]
+
     (let [input-char (.read System/in)]     
       (cond  
-       (= input-char 10) ;; enter pressed
+       (= input-char 27)
+       (do 
+         (.read System/in)
+         (let [escape-char (.read System/in) ]
+           (cond
+            (= escape-char 68)
+            (if (> vertical-cursor-pos 0)
+              (do
+                (print (char 27))
+                (print (char 91))
+                (print (char 68))
+                (flush)
+                (recur command-buffer (dec vertical-cursor-pos)))
+              (recur command-buffer vertical-cursor-pos))
+            
+            (= escape-char 67)
+            (if (and (< vertical-cursor-pos (count command-buffer)))
+              (do 
+                (print (char 27))
+                (print (char 91))
+                (print (char 67))
+                (flush)
+                (recur command-buffer (inc vertical-cursor-pos))   )
+              (recur command-buffer vertical-cursor-pos)
+              ))
+           ))
+
+
+
+
+       ; on enter pressed.
+       (= input-char 10)
        (let [input-token (split-parameters command-buffer) ]
          (if 
              (or 
@@ -83,17 +115,20 @@
            (do 
              (print (char input-char))
              (print-prompt)
-             (recur nil))))
+             (recur nil 0))))
+
+       ; on backspace entered.
        (= input-char 127)
-       (if (> (count command-buffer) 0)
+       (if (not-empty command-buffer)
          (do
            (print "\b \b")
            (flush)
-           (recur (remove-last command-buffer)))
-         (recur command-buffer))
+           (recur (remove-last command-buffer) (dec vertical-cursor-pos)))
+         (recur command-buffer 0))
+
        ;; default case
        :else
        (do
          (print (char input-char))
          (flush)
-         (recur (str command-buffer (char input-char))))))))
+         (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))

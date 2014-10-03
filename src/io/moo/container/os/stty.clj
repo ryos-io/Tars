@@ -33,4 +33,4 @@
 (defn turn-char-buffering-off
   []
   (flush)
-  (sh "sh" "-c" "reset"))
+  (sh "sh" "-c" "stty echo </dev/tty"))

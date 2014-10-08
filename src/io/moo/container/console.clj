@@ -73,6 +73,7 @@
       (cond  
        (= input-char 27)
        (do 
+         ;; by-pass the first char after escape-char.
          (.read System/in)
          (let [escape-char (.read System/in) ]
            (cond
@@ -97,9 +98,6 @@
               (recur command-buffer vertical-cursor-pos)
               ))
            ))
-
-
-
 
        ; on enter pressed.
        (= input-char 10)

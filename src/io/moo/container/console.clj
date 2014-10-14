@@ -62,6 +62,29 @@
 (defmacro remove-last [ txt ]
   `(subs ~txt 0 (- (count ~txt) 1)))
 
+(defmacro handle-backspace 
+  "macro that handles backspace strokes"
+  [command-buffer vertical-cursor-pos]
+  `(if (not-empty ~command-buffer)
+     (do
+       (print "\b \b")
+       (flush)
+       (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos)))
+     (recur ~command-buffer 0)))
+
+
+(defmacro handle-left
+  "macro that handles left arrow key stroke"
+  [command-buffer vertical-cursor-pos]
+  `(if (and (< ~vertical-cursor-pos (count ~command-buffer)))
+     (do 
+       (print (char 27))
+       (print (char 91))
+       (print (char 67))
+       (flush)
+       (recur ~command-buffer (inc ~vertical-cursor-pos)))
+     (recur ~command-buffer ~vertical-cursor-pos)))
+
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
@@ -86,18 +109,21 @@
                 (flush)
                 (recur command-buffer (dec vertical-cursor-pos)))
               (recur command-buffer vertical-cursor-pos))
+
+            (= escape-char 65)
+            (do
+              (print "up")
+              (flush)
+              (recur command-buffer vertical-cursor-pos))
+
+            (= escape-char 66)
+            (do
+              (print "down")
+              (flush)
+              (recur command-buffer vertical-cursor-pos))
             
             (= escape-char 67)
-            (if (and (< vertical-cursor-pos (count command-buffer)))
-              (do 
-                (print (char 27))
-                (print (char 91))
-                (print (char 67))
-                (flush)
-                (recur command-buffer (inc vertical-cursor-pos))   )
-              (recur command-buffer vertical-cursor-pos)
-              ))
-           ))
+            (handle-left command-buffer vertical-cursor-pos))))
 
        ; on enter pressed.
        (= input-char 10)
@@ -115,14 +141,9 @@
              (print-prompt)
              (recur nil 0))))
 
-       ; on backspace entered.
+       ;; on backspace entered.
        (= input-char 127)
-       (if (not-empty command-buffer)
-         (do
-           (print "\b \b")
-           (flush)
-           (recur (remove-last command-buffer) (dec vertical-cursor-pos)))
-         (recur command-buffer 0))
+       (handle-backspace command-buffer vertical-cursor-pos)
 
        ;; default case
        :else
@@ -130,3 +151,5 @@
          (print (char input-char))
          (flush)
          (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))
+
+

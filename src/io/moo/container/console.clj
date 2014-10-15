@@ -85,6 +85,22 @@
        (recur ~command-buffer (inc ~vertical-cursor-pos)))
      (recur ~command-buffer ~vertical-cursor-pos)))
 
+(defmacro handle-right
+  "macro that handles right arrow key stroke"
+  [command-buffer vertical-cursor-pos]
+  `(if (> ~vertical-cursor-pos 0)
+     (do
+      (print (char 27))
+      (print (char 91))
+      (print (char 68))
+      (flush)
+      (recur ~command-buffer (dec ~vertical-cursor-pos)))
+    (recur ~command-buffer ~vertical-cursor-pos)))
+
+(def ascii-right 68)
+(def ascii-left 67)
+(def ascii-enter 10)
+
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
@@ -100,16 +116,9 @@
          (.read System/in)
          (let [escape-char (.read System/in) ]
            (cond
-            (= escape-char 68)
-            (if (> vertical-cursor-pos 0)
-              (do
-                (print (char 27))
-                (print (char 91))
-                (print (char 68))
-                (flush)
-                (recur command-buffer (dec vertical-cursor-pos)))
-              (recur command-buffer vertical-cursor-pos))
-
+            (= escape-char ascii-right)
+            (handle-right command-buffer vertical-cursor-pos)
+            
             (= escape-char 65)
             (do
               (print "up")
@@ -122,11 +131,11 @@
               (flush)
               (recur command-buffer vertical-cursor-pos))
             
-            (= escape-char 67)
+            (= escape-char ascii-left)
             (handle-left command-buffer vertical-cursor-pos))))
 
        ; on enter pressed.
-       (= input-char 10)
+       (= input-char ascii-enter)
        (let [input-token (split-parameters command-buffer) ]
          (if 
              (or 

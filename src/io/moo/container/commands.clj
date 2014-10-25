@@ -25,9 +25,9 @@
 
 (def command-map 
   { 
-   "quit" {:console-action :TERMINATE, :desc "Type 'quit' to exit the console."},
-   "help" {:console-action :CONTINUE,  :desc "Type 'help' or 'help <command>' to get help."}
-   "moo"  {:console-action :CONTINUE,  :desc "Just moo!"}
+   "quit" {:console-action :TERMINATE, :desc "\nType 'quit' to exit the console."},
+   "help" {:console-action :CONTINUE,  :desc "\nType 'help' or 'help <command>' to get help."}
+   "moo"  {:console-action :CONTINUE,  :desc "\nJust moo!"}
    }
   )
 

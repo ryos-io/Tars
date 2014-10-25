@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ; 
-; Copyright (c) 2014 moo.io - Erhan Bagdemir
+; Copyright (c) 2014 mooito.org - Erhan Bagdemir
 ; 
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +20,12 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.container.container
-  (:use io.moo.container.console
-        io.moo.container.os.stty)
-  
-  (:gen-class))
+(ns io.moo.container.defs)
 
-(defn -main [ & args ]  
-  (.addShutdownHook (Runtime/getRuntime) (Thread. (fn [] (turn-char-buffering-off))))
-  (turn-char-buffering-on)
-  (print-motd)
-  (repl)
-  ; it is required, since the process does not terminate itself.
-  ; https://github.com/mooito/moo/issues/10
-  (System/exit 0))
+(def ascii-right 68)
+(def ascii-left 67)
+(def ascii-enter 10)
+(def ascii-up 65)
+(def ascii-down 66)
+(def ascii-escape 27)
+(def ascii-backspace 127)

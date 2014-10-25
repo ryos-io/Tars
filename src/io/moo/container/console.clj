@@ -23,6 +23,7 @@
 (ns io.moo.container.console
   (:gen-class)
   (:use io.moo.container.commands)
+  (:use io.moo.container.defs)
   (:use [clojure.string :only [split, blank?]])
   (:use io.moo.container.os.stty)
   (:import [io.moo.container.commands CommandTemplate]))
@@ -64,101 +65,93 @@
 
 (defmacro handle-backspace 
   "macro that handles backspace strokes"
-  [command-buffer vertical-cursor-pos]
+  [command-buffer vertical-cursor-pos command-history]
   `(if (not-empty ~command-buffer)
      (do
        (print "\b \b")
        (flush)
-       (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos)))
-     (recur ~command-buffer 0)))
+       (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos) ~command-history))
+     (recur ~command-buffer 0 ~command-history)))
 
 
 (defmacro handle-left
-  "macro that handles left arrow key stroke"
-  [command-buffer vertical-cursor-pos]
+  "Macro that handles left arrow key stroke."
+  [command-buffer vertical-cursor-pos command-history]
   `(if (and (< ~vertical-cursor-pos (count ~command-buffer)))
      (do 
        (print (char 27))
        (print (char 91))
        (print (char 67))
        (flush)
-       (recur ~command-buffer (inc ~vertical-cursor-pos)))
-     (recur ~command-buffer ~vertical-cursor-pos)))
+       (recur ~command-buffer (inc ~vertical-cursor-pos) ~command-history))
+     (recur ~command-buffer ~vertical-cursor-pos ~command-history)))
 
 (defmacro handle-right
-  "macro that handles right arrow key stroke"
-  [command-buffer vertical-cursor-pos]
+  "Macro that handles right arrow key stroke."
+  [command-buffer vertical-cursor-pos command-history]
   `(if (> ~vertical-cursor-pos 0)
      (do
       (print (char 27))
       (print (char 91))
       (print (char 68))
       (flush)
-      (recur ~command-buffer (dec ~vertical-cursor-pos)))
-    (recur ~command-buffer ~vertical-cursor-pos)))
+      (recur ~command-buffer (dec ~vertical-cursor-pos) ~command-history))
+    (recur ~command-buffer ~vertical-cursor-pos ~command-history)))
 
-(def ascii-right 68)
-(def ascii-left 67)
-(def ascii-enter 10)
+(defmacro handle-enter
+  "Macro handles enter key stroke."
+  [command-buffer input-char command-history]
+  `(let [input-token# (split-parameters ~command-buffer) ]
+     (if 
+         (or 
+          (blank? ~command-buffer)
+          (not= 
+           (perform  
+            (CommandTemplate.) 
+            (first input-token#) 
+            (get input-token# 1)) :TERMINATE))
+       (do 
+         (print (char ~input-char))
+         (print-prompt)
+         (recur nil 0 ~command-history)))))
 
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
   []
   (print-prompt)
-  (loop [command-buffer nil vertical-cursor-pos 0]
-
+  (loop [command-buffer nil vertical-cursor-pos 0 command-history []]
     (let [input-char (.read System/in)]     
       (cond  
-       (= input-char 27)
+       (= input-char ascii-escape)
        (do 
          ;; by-pass the first char after escape-char.
          (.read System/in)
          (let [escape-char (.read System/in) ]
            (cond
             (= escape-char ascii-right)
-            (handle-right command-buffer vertical-cursor-pos)
-            
-            (= escape-char 65)
+            (handle-right command-buffer vertical-cursor-pos command-history)
+            (= escape-char ascii-up)
             (do
               (print "up")
               (flush)
-              (recur command-buffer vertical-cursor-pos))
-
-            (= escape-char 66)
+              (recur command-buffer vertical-cursor-pos command-history))
+            (= escape-char ascii-down)
             (do
               (print "down")
               (flush)
-              (recur command-buffer vertical-cursor-pos))
-            
+              (recur command-buffer vertical-cursor-pos command-history))
             (= escape-char ascii-left)
-            (handle-left command-buffer vertical-cursor-pos))))
-
-       ; on enter pressed.
+            (handle-left command-buffer vertical-cursor-pos command-history))))
+        ; on enter pressed.
        (= input-char ascii-enter)
-       (let [input-token (split-parameters command-buffer) ]
-         (if 
-             (or 
-              (blank? command-buffer)
-              (not= 
-               (perform  
-                (CommandTemplate.) 
-                (first input-token) 
-                (get input-token 1)) :TERMINATE))
-           (do 
-             (print (char input-char))
-             (print-prompt)
-             (recur nil 0))))
-
+       (handle-enter command-buffer input-char command-history)
        ;; on backspace entered.
-       (= input-char 127)
-       (handle-backspace command-buffer vertical-cursor-pos)
-
+       (= input-char ascii-backspace)
+       (handle-backspace command-buffer vertical-cursor-pos command-history)
        ;; default case
        :else
        (do
          (print (char input-char))
          (flush)
-         (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))
-
-
+         (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos) command-history))))))

@@ -26,8 +26,13 @@
   
   (:gen-class))
 
+(defn addShutdownHook
+  "Add a function as shutdown hook on JVM exit."
+  [func]
+  (.addShutdownHook (Runtime/getRuntime) (Thread. func)))
+
 (defn -main [ & args ]  
-  (.addShutdownHook (Runtime/getRuntime) (Thread. (fn [] (turn-char-buffering-off))))
+  (addShutdownHook (fn [] (turn-char-buffering-off)))
   (turn-char-buffering-on)
   (print-motd)
   (repl)

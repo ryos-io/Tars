@@ -23,6 +23,19 @@
 (ns io.moo.container.commands
   (:gen-class))
 
+;; command history size
+(def command-history-size 20)
+
+;; command history
+(def command-history (atom '()))
+
+(defn put-command-to-history 
+  "Put a new command item to the history. Deletes the last item if the history exceeds its max. size"
+  [ command ]
+  (swap! command-history conj command)
+  (if (> (count (deref command-history)) command-history-size)
+    (swap! command-history drop-last)))
+
 (def command-map 
   { 
    "quit" {:console-action :TERMINATE, :desc "\nType 'quit' to exit the console."},
@@ -79,5 +92,7 @@
     (try
       (on-start command)
       (exec command params)
+      (put-command-to-history command)
       (catch Exception e (on-error command e)))
     (on-complete command)))
+

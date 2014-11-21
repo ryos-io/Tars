@@ -31,9 +31,9 @@
 
 (defn put-command-to-history 
   "Put a new command item to the history. Deletes the last item if the history exceeds its max. size"
-  [ command ]
+  [command]
   (swap! command-history conj command)
-  (if (> (count (deref command-history)) command-history-size)
+  (if (> (count @command-history) command-history-size)
     (swap! command-history drop-last)))
 
 (def command-map 
@@ -92,7 +92,8 @@
     (try
       (on-start command)
       (exec command params)
-      (put-command-to-history command)
+     
+      (put-command-to-history (str command " " params))
       (catch Exception e (on-error command e)))
     (on-complete command)))
 

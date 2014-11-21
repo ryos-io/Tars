@@ -147,7 +147,7 @@
             (handle-right command-buffer vertical-cursor-pos)
             
             (= escape-char ascii-up)            
-            (let [command (nth @command-history @history-cursor) command-size (count command)]
+            (let [command (if (> (count @command-history) 0) (nth @command-history @history-cursor) "") command-size (count command)]
               (if (not-empty @command-history)  
                 (do
                   (clean-command-line vertical-cursor-pos command-buffer)
@@ -159,7 +159,7 @@
               (recur command (dec command-size)))
             
             (= escape-char ascii-down)
-            (let [command (nth @command-history @history-cursor) command-size (count command)]                   
+            (let [command (if (> (count @command-history) 0) (nth @command-history @history-cursor) "") command-size (count command)]                   
               (if (not-empty @command-history)
                 (do
                   (clean-command-line vertical-cursor-pos command-buffer)

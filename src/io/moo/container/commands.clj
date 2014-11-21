@@ -24,7 +24,7 @@
   (:gen-class))
 
 ;; command history size
-(def command-history-size 20)
+(def command-history-size 5)
 
 ;; command history
 (def command-history (atom '()))

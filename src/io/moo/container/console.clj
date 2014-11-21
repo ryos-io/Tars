@@ -114,6 +114,20 @@
          (print-prompt)
          (recur nil 0)))))
 
+(defn clean-command-line 
+  "macro that handles backspace strokes"
+  [vertical-cursor-pos command-buffer]
+  (loop [curr-pos (if (> (count command-buffer) vertical-cursor-pos)  
+                         (count command-buffer)
+                         vertical-cursor-pos)]
+    (if (> curr-pos 0) 
+      (do
+        (print "\b \b")
+        (flush)
+        (recur (dec curr-pos))))))
+  
+(def history-cursor (atom 0))
+
 ;; REPL implementation.
 (defn repl
   "Read-Eval-Print-Loop implementation"
@@ -128,23 +142,43 @@
          (.read System/in)
          (let [escape-char (.read System/in) ]
            (cond
+            
             (= escape-char ascii-right)
             (handle-right command-buffer vertical-cursor-pos)
-            (= escape-char ascii-up)
-            (do
-              (print (last (deref command-history)))
-              (flush)
-              (recur command-buffer vertical-cursor-pos))
+            
+            (= escape-char ascii-up)            
+            (let [command (nth @command-history @history-cursor) command-size (count command)]
+              (if (not-empty @command-history)  
+                (do
+                  (clean-command-line vertical-cursor-pos command-buffer)
+                  (print command)
+                  (flush)
+                  (if (> @history-cursor 0)
+                    (swap! history-cursor dec)
+                    (reset! history-cursor (dec (count @command-history))  ))))
+              (recur command (dec command-size)))
+            
             (= escape-char ascii-down)
-            (do
-              (print (first (deref command-history)))
-              (flush)
-              (recur command-buffer vertical-cursor-pos))
+            (let [command (nth @command-history @history-cursor) command-size (count command)]                   
+              (if (not-empty @command-history)
+                (do
+                  (clean-command-line vertical-cursor-pos command-buffer)
+                  (print (nth @command-history @history-cursor))
+                  (flush)
+                  (if (= @history-cursor (dec (count @command-history)))
+                    (reset! history-cursor 0)
+                    (reset! history-cursor (inc @history-cursor))
+                    )))
+              (recur command (dec command-size)))
+            
             (= escape-char ascii-left)
             (handle-left command-buffer vertical-cursor-pos))))
-        ; on enter pressed.
+       
+       ;; on enter pressed.
        (= input-char ascii-enter)
-       (handle-enter command-buffer input-char)
+       (do
+         (reset! history-cursor 0)
+         (handle-enter command-buffer input-char))
        ;; on backspace entered.
        (= input-char ascii-backspace)
        (handle-backspace command-buffer vertical-cursor-pos)

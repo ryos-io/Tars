@@ -22,6 +22,7 @@
 
 (ns io.moo.container.console
   (:gen-class)
+  (:require [clojure.java.io :as io])
   (:use io.moo.container.commands)
   (:use io.moo.container.defs)
   (:use [clojure.string :only [split, blank?]])
@@ -32,8 +33,10 @@
 (defmacro forever [ & body ]
   `(while true ~@body))
 
+(def branding (-> "branding" io/resource io/file))
+           
 ;; Prints message of the day on start-up.
-(defn print-motd []
+(defn print-motd1 []
   (print "
            (    )
             (oo)
@@ -46,6 +49,11 @@
 ")
   (flush))
 
+(defn print-motd []
+  (print (slurp branding))
+  (flush))
+
+           
 (defn split-parameters 
   "Split parameters in form of command and parameters"
   [input]

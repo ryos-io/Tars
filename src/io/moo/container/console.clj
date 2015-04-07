@@ -39,7 +39,10 @@
 (def branding-path
   (clojure.string/join "/" [user-home relative-path-to-branding]))
 
-(def properties (load-file config-path))
+;; Load the configurations from the user's home if the config file exists
+(if (.exists (io/file config-path))
+  (load-file config-path)
+  (def config-prompt "moo"))
 
 ;; Macro definition of infinite loop for REPL. 
 (defmacro forever [ & body ]

@@ -23,37 +23,40 @@
 (ns io.moo.container.console
   (:gen-class)
   (:require [clojure.java.io :as io])
+  (:require [clojure.edn])
   (:use io.moo.container.commands)
   (:use io.moo.container.defs)
   (:use [clojure.string :only [split, blank?]])
   (:use io.moo.container.os.stty)
   (:import [io.moo.container.commands CommandTemplate]))
 
+(def user-home (System/getProperty "user.home"))
+(def relative-path-to-branding ".raccoon/cli/branding")
+(def relative-path-to-config ".raccoon/cli/config.clj")
+
+(def config-path
+  (clojure.string/join "/" [user-home relative-path-to-config]))
+
+(def branding-path
+  (clojure.string/join "/" [user-home relative-path-to-branding]))
+
+(def properties (load-file config-path))
+
 ;; Macro definition of infinite loop for REPL. 
 (defmacro forever [ & body ]
   `(while true ~@body))
 
-(def branding (-> "branding" io/resource io/file))
-           
-;; Prints message of the day on start-up.
-(defn print-motd1 []
-  (print "
-           (    )
-            (oo)
-   )\\.-----/(O O)
-  # ;       / u
-    (  .   |} )
-     |/ `.;|/;     Moo version 0.0.1 [ Type 'help' to get help! ]
-     \"     \" \"     https://github.com/mooito/moo
+;; path to branding
+(def branding
+  (if (.exists (io/file branding-path))
+    (-> branding-path io/file)
+    (-> "branding" io/resource io/file)))
 
-")
-  (flush))
-
+;; read and print The motd.
 (defn print-motd []
   (print (slurp branding))
   (flush))
-
-           
+      
 (defn split-parameters 
   "Split parameters in form of command and parameters"
   [input]
@@ -64,7 +67,7 @@
 (defn print-prompt 
   "Prints the command prompt."
   []
-  (print "moo> ")
+  (print (str config-prompt "> "))
   (flush))
 
 ; removes last character from the string.

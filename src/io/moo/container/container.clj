@@ -23,7 +23,6 @@
 (ns io.moo.container.container
   (:use io.moo.container.console
         io.moo.container.os.stty)
-  
   (:gen-class))
 
 (defn addShutdownHook

@@ -23,7 +23,6 @@
 (ns io.moo.container.console
   (:gen-class)
   (:require [clojure.java.io :as io])
-  (:require [clojure.edn])
   (:use io.moo.container.commands)
   (:use io.moo.container.defs)
   (:use [clojure.string :only [split, blank?]])

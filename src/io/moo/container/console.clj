@@ -30,8 +30,13 @@
   (:use io.moo.container.os.stty)
   (:import [io.moo.container.commands CommandTemplate]))
 
+;; Var which points to the user's home.
 (def user-home (System/getProperty "user.home"))
+
+;; Path to the branding file in the user's home.
 (def relative-path-to-branding ".raccoon/cli/branding")
+
+;; Path to the config file in the user's home.
 (def relative-path-to-config ".raccoon/cli/config.clj")
 
 (def config-path
@@ -54,6 +59,7 @@
 
 ;; read and print The motd.
 (defn print-motd []
+  "Prints out the MOTD to the console."
   (print (slurp branding))
   (flush))
       
@@ -64,18 +70,21 @@
     (split input #"\s" 2)
     ""))
 
+;; Prints the prompt in the CLI.
 (defn print-prompt 
   "Prints the command prompt."
   []
   (print (str config-prompt "> "))
   (flush))
 
-; removes last character from the string.
+;; Removes last character from the string.
 (defmacro remove-last [ txt ]
   `(subs ~txt 0 (- (count ~txt) 1)))
 
+;; Handles the backspace key stroke. It deletes the chars if there is, on the left hand
+;; side of the cursor.
 (defmacro handle-backspace 
-  "macro that handles backspace strokes"
+  "Macro that handles backspace strokes"
   [command-buffer vertical-cursor-pos]
   `(if (not-empty ~command-buffer)
      (do
@@ -84,6 +93,8 @@
        (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos)))
      (recur ~command-buffer 0)))
 
+;; Handles left key stroke that moves the cursor to the left if it is not the case that
+;; the cursor is located in its most link position.
 (defmacro handle-left
   "Macro that handles left arrow key stroke."
   [command-buffer vertical-cursor-pos]
@@ -96,6 +107,8 @@
        (recur ~command-buffer (inc ~vertical-cursor-pos)))
      (recur ~command-buffer ~vertical-cursor-pos)))
 
+;; Handles right key stroke that moves the cursor to the right if it is not the case that
+;; the cursor is located in its most right position.
 (defmacro handle-right
   "Macro that handles right arrow key stroke."
   [command-buffer vertical-cursor-pos]
@@ -108,6 +121,7 @@
       (recur ~command-buffer (dec ~vertical-cursor-pos)))
     (recur ~command-buffer ~vertical-cursor-pos)))
 
+;; Handles enter key stroke that triggers command execution if there is any entered.
 (defmacro handle-enter
   "Macro handles enter key stroke."
   [command-buffer input-char]
@@ -125,6 +139,7 @@
          (print-prompt)
          (recur nil 0)))))
 
+;; Macro which cleans command line.
 (defn clean-command-line 
   "macro that handles backspace strokes"
   [vertical-cursor-pos command-buffer]

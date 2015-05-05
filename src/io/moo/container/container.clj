@@ -30,11 +30,16 @@
   [func]
   (.addShutdownHook (Runtime/getRuntime) (Thread. func)))
 
-(defn -main [ & args ]  
+(defn start-repl
+  "Starts the repl session"
+  []
   (addShutdownHook (fn [] (turn-char-buffering-off)))
   (turn-char-buffering-on)
   (print-motd)
-  (repl)
+  (repl))
+
+(defn -main [ & args ]
+  (start-repl)
   ; it is required, since the process does not terminate itself.
   ; https://github.com/mooito/moo/issues/10
   (System/exit 0))

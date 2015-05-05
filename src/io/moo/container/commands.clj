@@ -50,18 +50,18 @@
 
 (def identity-func (fn [x] x))
 
-; Console command on-start action
+;; Console command on-start action
 (defmulti on-start identity-func)
 (defmulti on-error identity-func)
 (defmulti on-complete identity-func)
 (defmulti exec (fn [command param] command))
 
-; 'quit' command implementation.
+;; 'quit' command implementation.
 (defmethod on-start "quit" [ params ])
 (defmethod on-error "quit" [ params ]
   (println "quit failed!"))
 (defmethod exec "quit" [ commands params ])
- (defmethod on-complete "quit" [ params ]
+(defmethod on-complete "quit" [ params ]
   (print "\nBye!\n")
   (flush)
   (:console-action (get command-map "quit")))
@@ -92,8 +92,6 @@
     (try
       (on-start command)
       (exec command params)
-     
       (put-command-to-history (str command " " params))
       (catch Exception e (on-error command e)))
     (on-complete command)))
-

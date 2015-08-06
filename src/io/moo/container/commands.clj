@@ -42,7 +42,7 @@
     "moo"  {:console-action :CONTINUE,  :desc "\nJust moo!"}})
 
 (defprotocol Command 
-  (perform [ self, command, param ] 
+  (perform [self, command, param] 
     "Executes the command logic."))
 
 (def identity-func (fn [x] x))

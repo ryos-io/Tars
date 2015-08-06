@@ -33,14 +33,16 @@
 (def user-home (System/getProperty "user.home"))
 
 ;; Path to the branding file in the user's home.
-(def relative-path-to-branding ".raccoon/cli/branding")
+(def relative-path-to-branding ".moo/branding")
 
 ;; Path to the config file in the user's home.
-(def relative-path-to-config ".raccoon/cli/config.clj")
+(def relative-path-to-config ".moo/config.clj")
 
+;; Configuration path.
 (def config-path
   (clojure.string/join "/" [user-home relative-path-to-config]))
 
+;; Path to the branding file.
 (def branding-path
   (clojure.string/join "/" [user-home relative-path-to-branding]))
 
@@ -53,18 +55,19 @@
 (defmacro forever [ & body ]
   `(while true ~@body))
 
-;; path to branding
+;; Read branding information, if exists under the configuration folder
+;; otherwise load it from the classpath.
 (def branding
   (if (.exists (io/file branding-path))
     (-> branding-path io/file)
     (-> "branding" io/resource io/file)))
 
-;; read and print The motd.
+;; Print out the branding information.
 (defn print-motd []
   "Prints out the MOTD to the console."
   (print (slurp branding))
   (flush))
-      
+
 (defn split-parameters 
   "Split parameters in form of command and parameters"
   [input]

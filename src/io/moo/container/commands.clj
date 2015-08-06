@@ -36,13 +36,10 @@
   (if (> (count @command-history) command-history-size)
     (swap! command-history drop-last)))
 
-(def command-map 
-  { 
-   "quit" {:console-action :TERMINATE, :desc "\nType 'quit' to exit the console."},
-   "help" {:console-action :CONTINUE,  :desc "\nType 'help' or 'help <command>' to get help."}
-   "moo"  {:console-action :CONTINUE,  :desc "\nJust moo!"}
-   }
-  )
+(def command-map
+  { "quit" {:console-action :TERMINATE, :desc "\nType 'quit' to exit the console."},
+    "help" {:console-action :CONTINUE,  :desc "\nType 'help' or 'help <command>' to get help."}
+    "moo"  {:console-action :CONTINUE,  :desc "\nJust moo!"}})
 
 (defprotocol Command 
   (perform [ self, command, param ] 
@@ -88,7 +85,7 @@
 
 (deftype CommandTemplate []
   Command
-  (perform [ self, command, params ]
+  (perform [self, command, params]
     (try
       (on-start command)
       (exec command params)

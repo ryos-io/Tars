@@ -86,8 +86,8 @@
 (defmacro remove-last [ txt ]
   `(subs ~txt 0 (- (count ~txt) 1)))
 
-;; Handles the backspace key stroke. It deletes the chars if there is, on the left hand
-;; side of the cursor.
+;; Handles the backspace key stroke. It deletes the chars,
+;; if there is, on the left hand side of the cursor.
 (defmacro handle-backspace 
   "Macro that handles backspace strokes"
   [command-buffer vertical-cursor-pos]
@@ -98,8 +98,9 @@
        (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos)))
      (recur ~command-buffer 0)))
 
-;; Handles left key stroke that moves the cursor to the left if it is not the case that
-;; the cursor is located in its most link position.
+;; Handles left key stroke that moves the cursor to the left,
+;; if it is not the case, that the cursor is located in
+;; its most link position.
 (defmacro handle-left
   "Macro that handles left arrow key stroke."
   [command-buffer vertical-cursor-pos]
@@ -127,7 +128,8 @@
       (recur ~command-buffer (dec ~vertical-cursor-pos)))
     (recur ~command-buffer ~vertical-cursor-pos)))
 
-;; Handles enter key stroke that triggers command execution if there is any entered.
+;; Handles enter key stroke that triggers command execution,
+;; if there is any entered.
 (defmacro handle-enter
   "Macro handles enter key stroke."
   [command-buffer input-char]
@@ -161,8 +163,7 @@
          (flush)
          (if (= @history-cursor (dec (count @command-history)))
            (reset! history-cursor 0)
-           (reset! history-cursor (inc @history-cursor))
-           )))
+           (reset! history-cursor (inc @history-cursor)))))
      (recur command# (dec command-size#))))
 
 ;; Handles the macro the upper arrow keys.
@@ -190,50 +191,53 @@
   "macro that handles backspace strokes"
   [vertical-cursor-pos command-buffer]
   (loop [curr-pos (if (> (count command-buffer) vertical-cursor-pos)  
-                         (count command-buffer)
+                    (count command-buffer)
                          vertical-cursor-pos)]
     (if (> curr-pos 0) 
       (do
         (print "\b \b")
         (flush)
         (recur (dec curr-pos))))))
-  
+
+;; Current cursor position.
 (def history-cursor (atom 0))
 
 ;; REPL implementation.
 (defn repl
-  "Read-Eval-Print-Loop implementation"
+  "Read-Eval-Print-Loop implementation."
   []
   (print-prompt)
   (loop [command-buffer nil vertical-cursor-pos 0]
     (let [input-char (.read System/in)]     
       (cond  
-       (= input-char ascii-escape)
-       (do 
-         ;; by-pass the first char after escape-char.
-         (.read System/in)
-         (let [escape-char (.read System/in) ]
-           (cond
-            (= escape-char ascii-right)
-            (handle-right command-buffer vertical-cursor-pos)
-            (= escape-char ascii-up)            
-            (handle-up command-buffer vertical-cursor-pos)
-            (= escape-char ascii-down)
-            (handle-down command-buffer vertical-cursor-pos)
-            (= escape-char ascii-left)
-            (handle-left command-buffer vertical-cursor-pos))))
-       
-       ;; on enter pressed.
-       (= input-char ascii-enter)
-       (do
-         (reset! history-cursor 0)
-         (handle-enter command-buffer input-char))
-       ;; on backspace entered.
-       (= input-char ascii-backspace)
-       (handle-backspace command-buffer vertical-cursor-pos)
-       ;; default case
-       :else
-       (do
-         (print (char input-char))
-         (flush)
-         (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))
+        (= input-char ascii-escape)
+        (do 
+          ;; by-pass the first char after escape-char.
+          (.read System/in)
+          (let [escape-char (.read System/in) ]
+            ;; Handle navigation keys, left, up, right and down arrow
+            ;; key strokes. 
+            (cond
+              (= escape-char ascii-right)
+              (handle-right command-buffer vertical-cursor-pos)
+              (= escape-char ascii-up)            
+              (handle-up command-buffer vertical-cursor-pos)
+              (= escape-char ascii-down)
+              (handle-down command-buffer vertical-cursor-pos)
+              (= escape-char ascii-left)
+              (handle-left command-buffer vertical-cursor-pos))))
+        
+        ;; On-enter pressed.
+        (= input-char ascii-enter)
+        (do
+          (reset! history-cursor 0)
+          (handle-enter command-buffer input-char))
+        ;; On-backspace entered.
+        (= input-char ascii-backspace)
+        (handle-backspace command-buffer vertical-cursor-pos)
+        ;; default case
+        :else
+        (do
+          (print (char input-char))
+          (flush)
+          (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))

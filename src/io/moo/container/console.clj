@@ -112,8 +112,9 @@
        (recur ~command-buffer (inc ~vertical-cursor-pos)))
      (recur ~command-buffer ~vertical-cursor-pos)))
 
-;; Handles right key stroke that moves the cursor to the right if it is not the case that
-;; the cursor is located in its most right position.
+;; Handles right key stroke that moves the cursor to the right,
+;; if it is not the case, that the cursor is located in its
+;; most right position.
 (defmacro handle-right
   "Macro that handles right arrow key stroke."
   [command-buffer vertical-cursor-pos]
@@ -143,6 +144,22 @@
          (print (char ~input-char))
          (print-prompt)
          (recur nil 0)))))
+
+(defmacro handle-down
+  [command-buffer vertical-cursor-pos]
+  `(let [command# (if (> (count @command-history) 0)
+                    (nth @command-history @history-cursor) "")
+         command-size# (count command#)]                   
+     (if (not-empty @command-history)
+       (do
+         (clean-command-line vertical-cursor-pos# command-buffer)
+         (print (nth @command-history @history-cursor))
+         (flush)
+         (if (= @history-cursor (dec (count @command-history)))
+           (reset! history-cursor 0)
+           (reset! history-cursor (inc @history-cursor))
+           )))
+     (recur command# (dec command-size))))
 
 ;; Handles the macro the upper arrow keys.
 ;; It is used to navigate through the command history.
@@ -193,10 +210,8 @@
          (.read System/in)
          (let [escape-char (.read System/in) ]
            (cond
-            
             (= escape-char ascii-right)
             (handle-right command-buffer vertical-cursor-pos)
-            
             (= escape-char ascii-up)            
             (handle-up command-buffer vertical-cursor-pos)
             

@@ -152,14 +152,14 @@
          command-size# (count command#)]                   
      (if (not-empty @command-history)
        (do
-         (clean-command-line vertical-cursor-pos# command-buffer)
+         (clean-command-line ~vertical-cursor-pos ~command-buffer)
          (print (nth @command-history @history-cursor))
          (flush)
          (if (= @history-cursor (dec (count @command-history)))
            (reset! history-cursor 0)
            (reset! history-cursor (inc @history-cursor))
            )))
-     (recur command# (dec command-size))))
+     (recur command# (dec command-size#))))
 
 ;; Handles the macro the upper arrow keys.
 ;; It is used to navigate through the command history.
@@ -214,20 +214,8 @@
             (handle-right command-buffer vertical-cursor-pos)
             (= escape-char ascii-up)            
             (handle-up command-buffer vertical-cursor-pos)
-            
             (= escape-char ascii-down)
-            (let [command (if (> (count @command-history) 0) (nth @command-history @history-cursor) "") command-size (count command)]                   
-              (if (not-empty @command-history)
-                (do
-                  (clean-command-line vertical-cursor-pos command-buffer)
-                  (print (nth @command-history @history-cursor))
-                  (flush)
-                  (if (= @history-cursor (dec (count @command-history)))
-                    (reset! history-cursor 0)
-                    (reset! history-cursor (inc @history-cursor))
-                    )))
-              (recur command (dec command-size)))
-            
+            (handle-down command-buffer vertical-cursor-pos)
             (= escape-char ascii-left)
             (handle-left command-buffer vertical-cursor-pos))))
        

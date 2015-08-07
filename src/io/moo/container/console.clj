@@ -144,18 +144,25 @@
          (print-prompt)
          (recur nil 0)))))
 
+;; Handles the macro the upper arrow keys.
+;; It is used to navigate through the command history.
 (defmacro handle-up
   [command-buffer vertical-cursor-pos]
-  `(let [command# (if (> (count @command-history) 0) (nth @command-history @history-cursor) "") command-size# (count command#)]
-    (if (not-empty @command-history)  
-      (do
-        (clean-command-line ~vertical-cursor-pos ~command-buffer)
-        (print command#)
-        (flush)
-        (if (> @history-cursor 0)
-          (swap! history-cursor dec)
-          (reset! history-cursor (dec (count @command-history))  ))))
-    (recur command# (dec command-size#))))
+  ;; Command is the command will be picked from the history
+  ;; everytime we hit the upper arrow key.
+  `(let [command# (if (> (count @command-history) 0)
+                    ;; History cursor is the current pos of the cursor.
+                    (nth @command-history @history-cursor) "")
+         command-size# (count command#)]
+     (if (not-empty @command-history)  
+       (do
+         (clean-command-line ~vertical-cursor-pos ~command-buffer)
+         (print command#)
+         (flush)
+         (if (> @history-cursor 0)
+           (swap! history-cursor dec)
+           (reset! history-cursor (dec (count @command-history))  ))))
+     (recur command# (dec command-size#))))
 
 ;; Macro which cleans command line.
 (defn clean-command-line 

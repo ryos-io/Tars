@@ -145,7 +145,11 @@
          (print-prompt)
          (recur nil 0)))))
 
+;; Handles down key stroke that moves the cursor down to the command history.
+;; It lets the users navigate through the command history.
 (defmacro handle-down
+  "Handles the down-arrow-key-hit which allows users navigate
+   through the command history forwards."
   [command-buffer vertical-cursor-pos]
   `(let [command# (if (> (count @command-history) 0)
                     (nth @command-history @history-cursor) "")

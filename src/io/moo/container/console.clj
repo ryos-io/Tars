@@ -183,7 +183,7 @@
          (flush)
          (if (> @history-cursor 0)
            (swap! history-cursor dec)
-           (reset! history-cursor (dec (count @command-history))  ))))
+           (reset! history-cursor (dec (count @command-history))))))
      (recur command# (dec command-size#))))
 
 ;; Macro which cleans command line.
@@ -199,10 +199,13 @@
         (flush)
         (recur (dec curr-pos))))))
 
-;; Current cursor position.
+;; Current cursor position in the command history.
+;; It points to the item which is selected by navigating
+;; through the command history using arrow keys. 
 (def history-cursor (atom 0))
 
-;; REPL implementation.
+;; REPL implementation. REPL is started by the main function
+;; on start-up.
 (defn repl
   "Read-Eval-Print-Loop implementation."
   []

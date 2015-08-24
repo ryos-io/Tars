@@ -1,6 +1,6 @@
 (ns io.moo.container.rendering)
 
-(defmulti render (fn [x] (:format x)))
+(defmulti render (fn [x] (:type x)))
 
 ;; Plain output rendering.
 (defmethod render "plain" [input]
@@ -9,7 +9,7 @@
 ;; Tabular representation rendering.
 (defmethod render "table" [input]
   (let [cols (:cols input)
-        rows (:rows input)
-        headers (:headers input)
-        output-matrix (:output input)
+        hlabels (:labels (:headers input))
+        hformat (:format (:headers input))
+        cformat (:format (:columns input))
         ]))

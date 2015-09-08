@@ -13,10 +13,10 @@
         hformat (:headers (:format metadata))
         cformat (:columns (:format metadata))]
     
-    (loop [cell input, row nil]
-      (println cell)
+    (loop [cell input, row [], result []]
       (if (not (empty? cell))
-        (if (> (count row) cols)
-          (do (recur (rest cell) (conj row (first input))))
-          (recur (rest cell) nil)
-          )))))
+        (if (= (count row) cols)
+          (recur (rest cell) (conj [] (first cell))  (conj result (clojure.string/join (map #(format %1 %2) cformat row))))
+          (recur (rest cell) (conj row (first cell)) result))
+        (if (not (empty? row)) (conj result (clojure.string/join (map #(format %1 %2) cformat row))) result))
+      )))

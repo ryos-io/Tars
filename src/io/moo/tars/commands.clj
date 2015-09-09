@@ -21,7 +21,8 @@
 ; THE SOFTWARE.
 
 (ns io.moo.tars.commands
-  (:gen-class))
+  (:gen-class)
+  (:require [io.moo.tars.rendering :as r]))
 
 ;; command history size
 (def command-history-size 5)
@@ -56,11 +57,10 @@
 ;; 'quit' command implementation.
 (defmethod on-start "quit" [ params ])
 (defmethod on-error "quit" [ params ]
-  (println "quit failed!"))
+  (r/prints "quit failed!" println))
 (defmethod exec "quit" [ commands params ])
 (defmethod on-complete "quit" [ params ]
-  (print "\nBye!\n")
-  (flush)
+  (r/prints "\nBye!\n" print)
   (:console-action (get command-map "quit")))
 
 ;; 'help' command implementation
@@ -72,8 +72,8 @@
     (println (str "\nPlease provide a command to get help: e.g 'help quit'"))
   (let [desc (:desc (get command-map params))]
     (if (clojure.string/blank? desc)
-      (println (str "\nHelp not found for: '" params "'"))
-      (println desc)))))
+      (r/prints (str "\nHelp not found for: '" params "'") println)
+      (r/prints desc println)))))
 (defmethod on-complete "help" [ params ]
   (:console-action (get command-map "help")))
 
@@ -82,8 +82,7 @@
 (defmethod on-start :default [ params ])
 (defmethod on-error :default [ params ])
 (defmethod on-complete :default [ command ]
-  (println (str "\nUnknown command '" command "'. Type 'help' to get help."))
-  (flush))
+  (r/prints (str "\nUnknown command '" command "'. Type 'help' to get help.") println))
 
 (deftype CommandTemplate []
   Command

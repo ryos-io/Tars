@@ -49,7 +49,7 @@
 ;; Load the configurations from the user's home if the config file exists
 (if (.exists (io/file config-path))
   (load-file config-path)
-  (def config-prompt "moo"))
+  (def config-prompt "tars"))
 
 ;; Macro definition of infinite loop for REPL.
 (defmacro forever [ & body ]

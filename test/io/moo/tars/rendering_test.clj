@@ -6,7 +6,7 @@
 
 (deftest output-plain
   (is
-   (= "content"
+   (= ["content"]
       (renderer/render
        ["content"] {:type "plain" :format "%s"}))))
 

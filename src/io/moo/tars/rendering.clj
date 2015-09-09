@@ -33,10 +33,9 @@
   (f arg)
   (flush))
 
-(defmethod prints Char [arg, f]
+(defmethod prints Character [arg, f]
   (f arg)
   (flush))
-
 
 (defmulti render
   (fn [input, metadata] (:type metadata)))

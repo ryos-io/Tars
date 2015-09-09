@@ -1,4 +1,4 @@
-moo
+TARS
 ===
 
 <img src="https://travis-ci.org/mooito/moo.svg" />

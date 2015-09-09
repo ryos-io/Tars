@@ -3,4 +3,5 @@ moo
 
 <img src="https://travis-ci.org/mooito/moo.svg" />
 
-A Clojure framework to provide command-line interface for user interaction.
+TARS is a framework, which provides a command-line interface for user
+interaction in your applications like the CLI clients for mongo, mysql, etc.

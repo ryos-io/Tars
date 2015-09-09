@@ -20,26 +20,12 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.container
-  (:use io.moo.tars.console
-        io.moo.tars.os.stty)
-  (:gen-class))
+(ns io.moo.tars.defs)
 
-(defn addShutdownHook
-  "Add a function as shutdown hook on JVM exit."
-  [func]
-  (.addShutdownHook (Runtime/getRuntime) (Thread. func)))
-
-(defn start-repl
-  "Starts the repl session"
-  []
-  (addShutdownHook (fn [] (turn-char-buffering-off)))
-  (turn-char-buffering-on)
-  (print-motd)
-  (repl))
-
-(defn -main [ & args ]
-  (start-repl)
-  ; it is required, since the process does not terminate itself.
-  ; https://github.com/mooito/moo/issues/10
-  (System/exit 0))
+(def ascii-right 68)
+(def ascii-left 67)
+(def ascii-enter 10)
+(def ascii-up 65)
+(def ascii-down 66)
+(def ascii-escape 27)
+(def ascii-backspace 127)

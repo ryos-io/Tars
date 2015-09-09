@@ -1,4 +1,4 @@
-(ns io.moo.container.rendering)
+(ns io.moo.tars.rendering)
 
 (defmulti render
   (fn [input, metadata] (:type metadata)))
@@ -12,7 +12,7 @@
         hlabels (:headers (:labels metadata))
         hformat (:headers (:format metadata))
         cformat (:columns (:format metadata))]
-    
+
     (loop [cell input, row [], result []]
       (if (not (empty? cell))
         (if (= (count row) cols)

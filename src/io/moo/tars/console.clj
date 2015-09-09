@@ -1,17 +1,17 @@
 ; The MIT License (MIT)
-; 
+;
 ; Copyright (c) 2014 moo.io - Erhan Bagdemir
-; 
+;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
 ; in the Software without restriction, including without limitation the rights
 ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ; copies of the Software, and to permit persons to whom the Software is
 ; furnished to do so, subject to the following conditions:
-; 
+;
 ; The above copyright notice and this permission notice shall be included in
 ; all copies or substantial portions of the Software.
-; 
+;
 ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,14 +20,14 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.container.console
+(ns io.moo.tars.console
   (:gen-class)
   (:require [clojure.java.io :as io])
-  (:use io.moo.container.commands)
-  (:use io.moo.container.defs)
+  (:use io.moo.tars.commands)
+  (:use io.moo.tars.defs)
   (:use [clojure.string :only [split, blank?]])
-  (:use io.moo.container.os.stty)
-  (:import [io.moo.container.commands CommandTemplate]))
+  (:use io.moo.tars.os.stty)
+  (:import [io.moo.tars.commands CommandTemplate]))
 
 ;; Var which points to the user's home.
 (def user-home (System/getProperty "user.home"))
@@ -51,7 +51,7 @@
   (load-file config-path)
   (def config-prompt "moo"))
 
-;; Macro definition of infinite loop for REPL. 
+;; Macro definition of infinite loop for REPL.
 (defmacro forever [ & body ]
   `(while true ~@body))
 
@@ -68,7 +68,7 @@
   (print (slurp branding))
   (flush))
 
-(defn split-parameters 
+(defn split-parameters
   "Split parameters in form of command and parameters"
   [input]
   (if (not (blank? input))
@@ -76,7 +76,7 @@
     ""))
 
 ;; Prints the prompt in the CLI.
-(defn print-prompt 
+(defn print-prompt
   "Prints the command prompt."
   []
   (print (str config-prompt "> "))
@@ -88,7 +88,7 @@
 
 ;; Handles the backspace key stroke. It deletes the chars,
 ;; if there is, on the left hand side of the cursor.
-(defmacro handle-backspace 
+(defmacro handle-backspace
   "Macro that handles backspace strokes"
   [command-buffer vertical-cursor-pos]
   `(if (not-empty ~command-buffer)
@@ -105,7 +105,7 @@
   "Macro that handles left arrow key stroke."
   [command-buffer vertical-cursor-pos]
   `(if (and (< ~vertical-cursor-pos (count ~command-buffer)))
-     (do 
+     (do
        (print (char 27))
        (print (char 91))
        (print (char 67))
@@ -134,15 +134,15 @@
   "Macro handles enter key stroke."
   [command-buffer input-char]
   `(let [input-token# (split-parameters ~command-buffer)]
-     (if 
-         (or 
+     (if
+         (or
           (blank? ~command-buffer)
-          (not= 
-           (perform  
-            (CommandTemplate.) 
-            (first input-token#) 
+          (not=
+           (perform
+            (CommandTemplate.)
+            (first input-token#)
             (get input-token# 1)) :TERMINATE))
-       (do 
+       (do
          (print (char ~input-char))
          (print-prompt)
          (recur nil 0)))))
@@ -155,7 +155,7 @@
   [command-buffer vertical-cursor-pos]
   `(let [command# (if (> (count @command-history) 0)
                     (nth @command-history @history-cursor) "")
-         command-size# (count command#)]                   
+         command-size# (count command#)]
      (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
@@ -176,7 +176,7 @@
                     ;; History cursor is the current pos of the cursor.
                     (nth @command-history @history-cursor) "")
          command-size# (count command#)]
-     (if (not-empty @command-history)  
+     (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
          (print command#)
@@ -187,13 +187,13 @@
      (recur command# (dec command-size#))))
 
 ;; Macro which cleans command line.
-(defn clean-command-line 
+(defn clean-command-line
   "macro that handles backspace strokes"
   [vertical-cursor-pos command-buffer]
-  (loop [curr-pos (if (> (count command-buffer) vertical-cursor-pos)  
+  (loop [curr-pos (if (> (count command-buffer) vertical-cursor-pos)
                     (count command-buffer)
                          vertical-cursor-pos)]
-    (if (> curr-pos 0) 
+    (if (> curr-pos 0)
       (do
         (print "\b \b")
         (flush)
@@ -201,7 +201,7 @@
 
 ;; Current cursor position in the command history.
 ;; It points to the item which is selected by navigating
-;; through the command history using arrow keys. 
+;; through the command history using arrow keys.
 (def history-cursor (atom 0))
 
 ;; REPL implementation. REPL is started by the main function
@@ -211,25 +211,25 @@
   []
   (print-prompt)
   (loop [command-buffer nil vertical-cursor-pos 0]
-    (let [input-char (.read System/in)]     
-      (cond  
+    (let [input-char (.read System/in)]
+      (cond
         (= input-char ascii-escape)
-        (do 
+        (do
           ;; by-pass the first char after escape-char.
           (.read System/in)
           (let [escape-char (.read System/in) ]
             ;; Handle navigation keys, left, up, right and down arrow
-            ;; key strokes. 
+            ;; key strokes.
             (cond
               (= escape-char ascii-right)
               (handle-right command-buffer vertical-cursor-pos)
-              (= escape-char ascii-up)            
+              (= escape-char ascii-up)
               (handle-up command-buffer vertical-cursor-pos)
               (= escape-char ascii-down)
               (handle-down command-buffer vertical-cursor-pos)
               (= escape-char ascii-left)
               (handle-left command-buffer vertical-cursor-pos))))
-        
+
         ;; On-enter pressed.
         (= input-char ascii-enter)
         (do

@@ -1,17 +1,17 @@
 ; The MIT License (MIT)
-; 
+;
 ; Copyright (c) 2014 moo.io - Erhan Bagdemir
-; 
+;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
 ; in the Software without restriction, including without limitation the rights
 ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ; copies of the Software, and to permit persons to whom the Software is
 ; furnished to do so, subject to the following conditions:
-; 
+;
 ; The above copyright notice and this permission notice shall be included in
 ; all copies or substantial portions of the Software.
-; 
+;
 ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,7 +20,7 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.container.commands
+(ns io.moo.tars.commands
   (:gen-class))
 
 ;; command history size
@@ -29,7 +29,7 @@
 ;; command history
 (def command-history (atom '()))
 
-(defn put-command-to-history 
+(defn put-command-to-history
   "Put a new command item to the history. Deletes the last item if the history exceeds its max. size"
   [command]
   (swap! command-history conj command)
@@ -41,8 +41,8 @@
     "help" {:console-action :CONTINUE,  :desc "\nType 'help' or 'help <command>' to get help."}
     "moo"  {:console-action :CONTINUE,  :desc "\nJust moo!"}})
 
-(defprotocol Command 
-  (perform [self, command, param] 
+(defprotocol Command
+  (perform [self, command, param]
     "Executes the command logic."))
 
 (def identity-func (fn [x] x))

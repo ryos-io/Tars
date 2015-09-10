@@ -1,6 +1,6 @@
 (defproject io.moo/tars "1.0.0-RC"
-  :description "Command line console implementation for moo-framework."
-  :url "https://github.com/mooito/moo"
+  :description "CLI framework for Clojure."
+  :url "https://github.com/mooito/tars"
   :license {:name "MIT License" :url "http://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.5.1"]]
   :plugins [[codox "0.8.10" ]

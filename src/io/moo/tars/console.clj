@@ -48,6 +48,8 @@
 (def branding-path
   (clojure.string/join "/" [user-home relative-path-to-branding]))
 
+(def current-prompt (atom "tars"))
+
 ;; Load the configurations from the user's home if the config file exists
 (if (.exists (io/file config-path))
   (load-file config-path)
@@ -80,7 +82,7 @@
 (defn print-prompt
   "Prints the command prompt."
   []
-  (r/prints (str config-prompt "> ") print))
+  (r/prints (str @current-prompt "> ") print))
 
 ;; Removes last character from the string.
 (defmacro remove-last [ txt ]

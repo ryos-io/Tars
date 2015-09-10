@@ -3,5 +3,9 @@
   :url "https://github.com/mooito/moo"
   :license {:name "MIT License" :url "http://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.5.1"]]
+  :plugins [[codox "0.8.10" ]
+            [jonase/eastwood "0.2.1"]
+            [lein-cloverage "1.0.2"]
+            [lein-midje "3.1.3"]]
   :main io.moo.tars.container
   :resource-paths ["src/main/resources"])

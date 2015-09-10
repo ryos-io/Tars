@@ -22,7 +22,9 @@
 
 (ns io.moo.tars.console
   (:gen-class)
-  (:require [clojure.java.io :as io])
+  (:require
+    [clojure.java.io :as io]
+    [io.moo.tars.rendering :as r])
   (:use io.moo.tars.commands)
   (:use io.moo.tars.defs)
   (:use [clojure.string :only [split, blank?]])
@@ -65,8 +67,7 @@
 ;; Print out the branding information.
 (defn print-motd []
   "Prints out the MOTD to the console."
-  (print (slurp branding))
-  (flush))
+  (r/prints (slurp branding) print))
 
 (defn split-parameters
   "Split parameters in form of command and parameters"
@@ -79,8 +80,7 @@
 (defn print-prompt
   "Prints the command prompt."
   []
-  (print (str config-prompt "> "))
-  (flush))
+  (r/prints (str config-prompt "> ") print))
 
 ;; Removes last character from the string.
 (defmacro remove-last [ txt ]
@@ -93,8 +93,7 @@
   [command-buffer vertical-cursor-pos]
   `(if (not-empty ~command-buffer)
      (do
-       (print "\b \b")
-       (flush)
+       (r/prints "\b \b" print)
        (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos)))
      (recur ~command-buffer 0)))
 
@@ -159,8 +158,7 @@
      (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
-         (print (nth @command-history @history-cursor))
-         (flush)
+         (r/prints (nth @command-history @history-cursor) print)
          (if (= @history-cursor (dec (count @command-history)))
            (reset! history-cursor 0)
            (reset! history-cursor (inc @history-cursor)))))
@@ -179,8 +177,7 @@
      (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
-         (print command#)
-         (flush)
+         (r/prints command# print)
          (if (> @history-cursor 0)
            (swap! history-cursor dec)
            (reset! history-cursor (dec (count @command-history))))))
@@ -195,8 +192,7 @@
                          vertical-cursor-pos)]
     (if (> curr-pos 0)
       (do
-        (print "\b \b")
-        (flush)
+        (r/prints "\b \b" print)
         (recur (dec curr-pos))))))
 
 ;; Current cursor position in the command history.
@@ -241,6 +237,5 @@
         ;; default case
         :else
         (do
-          (print (char input-char))
-          (flush)
+          (r/prints (char input-char) print)
           (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))

@@ -22,11 +22,26 @@
 
 (ns io.moo.tars.rendering)
 
+(defmulti prints
+  (fn [arg, f] (class arg)))
+
+(defmethod prints :default [arg, f]
+  (doseq [item arg] (f item))
+  (flush))
+
+(defmethod prints String [arg, f]
+  (f arg)
+  (flush))
+
+(defmethod prints Character [arg, f]
+  (f arg)
+  (flush))
+
 (defmulti render
   (fn [input, metadata] (:type metadata)))
 
 (defmethod render "plain" [input, metadata]
-  (format (:format metadata) (first input)))
+  (vector (format (:format metadata) (first input))))
 
 ;; Tabular representation rendering.
 (defmethod render "table" [input, metadata]

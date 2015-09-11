@@ -20,7 +20,7 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.console
+(ns io.moo.tars.repl
   (:gen-class)
   (:require
     [clojure.java.io :as io]

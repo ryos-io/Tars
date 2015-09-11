@@ -21,7 +21,7 @@
 ; THE SOFTWARE.
 
 (ns io.moo.tars.container
-  (:use io.moo.tars.console
+  (:use io.moo.tars.repl
         io.moo.tars.os.stty)
   (:gen-class))
 

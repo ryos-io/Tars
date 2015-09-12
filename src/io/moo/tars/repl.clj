@@ -35,10 +35,10 @@
 (def user-home (System/getProperty "user.home"))
 
 ;; Path to the branding file in the user's home.
-(def relative-path-to-branding ".moo/branding")
+(def relative-path-to-branding ".tars/branding")
 
 ;; Path to the config file in the user's home.
-(def relative-path-to-config ".moo/config.clj")
+(def relative-path-to-config ".tars/config.clj")
 
 ;; Configuration path.
 (def config-path
@@ -64,7 +64,7 @@
 (def branding
   (if (.exists (io/file branding-path))
     (-> branding-path io/file)
-    (-> "branding" io/resource io/file)))
+    (-> "branding-default" io/resource io/file)))
 
 ;; Print out the branding information.
 (defn print-motd []

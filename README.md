@@ -29,7 +29,7 @@ the CLI will be available for user interaction with a default MOTD:
 /\/\  (. .)
 `||'   |#|
  ||__.-"-"-.___
- `---| . . |--.\     TARS version 0.0.1 [ Type 'help' to get help! ]
+ `---| . . |--.\     TARS version 0.1.0 [ Type 'help' to get help! ]
      | : : |  |_|    https://github.com/mooito/tars
      `..-..' ( I )
       || ||   | |

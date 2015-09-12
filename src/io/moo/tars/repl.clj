@@ -62,7 +62,7 @@
   "Prints out the MOTD to the console."
   (r/prints (slurp branding) print))
 
-(defn split-parameters
+(defn- split-parameters
   "Split parameters in form of command and parameters"
   [input]
   (if (not (blank? input))
@@ -70,7 +70,7 @@
     ""))
 
 ;; Prints the prompt in the CLI.
-(defn print-prompt
+(defn- print-prompt
   "Prints the command prompt."
   []
   (r/prints (str @current-prompt "> ") print))
@@ -176,9 +176,7 @@
            (reset! history-cursor (dec (count @command-history))))))
      (recur command# (dec command-size#))))
 
-;; Macro which cleans command line.
-(defn clean-command-line
-  "macro that handles backspace strokes"
+(defn- clean-command-line
   [vertical-cursor-pos command-buffer]
   (loop [curr-pos (if (> (count command-buffer) vertical-cursor-pos)
                     (count command-buffer)

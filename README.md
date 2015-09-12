@@ -1,4 +1,4 @@
-![TARS](http://www.moo.io/img/tars.jpg)
+![TARS](http://www.moo.io/img/tars2.jpg)
 ===
 
 <img src="https://travis-ci.org/mooito/tars.svg" />

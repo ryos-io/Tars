@@ -3,11 +3,12 @@ TARS
 
 <img src="https://travis-ci.org/mooito/tars.svg" />
 
-TARS is a framework, which provides a command-line interface for user
-interaction in your applications like the CLI clients for mongo, mysql, etc.
+TARS is a framework, which provides a command-line interface for user interaction for your applications like  CLI clients e.g mongo, mysql, etc. TARS provides a baseline functionality of a CLI.  You only need to extend it to make TARS understand your custom commands.
 
-To add the CLI into your application just add the dependency and the define
-the main function:
+How to use
+---
+
+To add the CLI into your application just add the dependency and the define the main function.
 
 ```
 (defproject your-app "0.1.0-SNAPSHOT"
@@ -20,7 +21,6 @@ After you run the your application by calling:
 ```
 lein run
 ```
-
 the CLI will be available for user interaction with a default MOTD:
 
 ```
@@ -37,5 +37,10 @@ the CLI will be available for user interaction with a default MOTD:
      |__|__|  (.)
 tars>
 ```
+Out of box, TARS provide two commands, that are "help" and "quit". You can now extend the TARS to understand your commands.
+
+
+How to customize
+---
 
 You can override the MOTD by creating a new branding file under "~/.tars/branding"

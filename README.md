@@ -21,7 +21,7 @@ After you run the your application by calling:
 ```
 lein run
 ```
-the CLI will be available for user interaction with a default MOTD:
+the CLI will be available for user interaction with a default MOTD and prompt. You can override this settings and customize them in your applications.
 
 ```
         .

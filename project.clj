@@ -1,4 +1,4 @@
-(defproject io.moo/tars "1.0.0-RC"
+(defproject io.moo/tars "0.1.0"
   :description "CLI framework for Clojure."
   :url "https://github.com/mooito/tars"
   :license {:name "MIT License" :url "http://opensource.org/licenses/MIT"}

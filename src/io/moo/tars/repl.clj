@@ -31,15 +31,6 @@
   (:use io.moo.tars.os.stty)
   (:import [io.moo.tars.commands CommandTemplate]))
 
-;; Var which points to the user's home.
-(def user-home (System/getProperty "user.home"))
-
-;; Path to the branding file in the user's home.
-(def relative-path-to-branding ".tars/branding")
-
-;; Path to the config file in the user's home.
-(def relative-path-to-config ".tars/config.clj")
-
 ;; Configuration path.
 (def config-path
   (clojure.string/join "/" [user-home relative-path-to-config]))
@@ -64,7 +55,7 @@
 (def branding
   (if (.exists (io/file branding-path))
     (-> branding-path io/file)
-    (-> "branding-default" io/resource io/file)))
+    (-> "branding-default" io/resource)))
 
 ;; Print out the branding information.
 (defn print-motd []

@@ -29,3 +29,12 @@
 (def ascii-down 66)
 (def ascii-escape 27)
 (def ascii-backspace 127)
+
+;; Var which points to the user's home.
+(def user-home (System/getProperty "user.home"))
+
+;; Path to the branding file in the user's home.
+(def relative-path-to-branding ".tars/branding")
+
+;; Path to the config file in the user's home.
+(def relative-path-to-config ".tars/config.clj")

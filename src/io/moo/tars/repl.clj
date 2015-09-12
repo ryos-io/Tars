@@ -39,12 +39,12 @@
 (def branding-path
   (clojure.string/join "/" [user-home relative-path-to-branding]))
 
-(def current-prompt (atom "tars"))
-
 ;; Load the configurations from the user's home if the config file exists
 (if (.exists (io/file config-path))
   (load-file config-path)
-  (def config-prompt "tars"))
+  (load-file "src/main/resources/default-config.clj"))
+
+(def current-prompt (atom (:prompt config)))
 
 ;; Macro definition of infinite loop for REPL.
 (defmacro forever [ & body ]

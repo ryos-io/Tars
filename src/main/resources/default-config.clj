@@ -1,0 +1,1 @@
+(def config {:prompt "tars"})

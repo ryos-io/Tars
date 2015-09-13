@@ -7,5 +7,6 @@
             [jonase/eastwood "0.2.1"]
             [lein-cloverage "1.0.2"]
             [lein-midje "3.1.3"]]
+  :deploy-repositories {"releases" :clojars "snapshots" :clojars}
   :main io.moo.tars.container
   :resource-paths ["src/main/resources"])

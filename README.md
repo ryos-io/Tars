@@ -5,6 +5,7 @@
 
 TARS is a framework, which provides a command-line interface to interact with users of your applications like  CLI clients e.g mongo, mysql, etc. TARS provides a baseline functionality of a CLI.  It even understands a few commands like "help" and "quit". You only need to extend it to make TARS understand your custom commands.
 
+# [Doc](http://www.moo.io/tars/doc/)
 + Twitter: [@ebagdemir](https://twitter.com/ebagdemir)
 + [GitHub Issues](https://github.com/mooito/tars/issues)
 

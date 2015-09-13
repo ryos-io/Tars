@@ -23,7 +23,7 @@ To add the CLI into your application just add the dependency and the define the 
   :main io.moo.tars.container)
 ```
 
-After you run the your application by calling:
+After you run your application by calling:
 ```
 lein run
 ```

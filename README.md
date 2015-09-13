@@ -40,10 +40,15 @@ the CLI will be available for user interaction with a default MOTD and prompt. Y
      |__|__|  (.)
 tars>
 ```
-Out of box, TARS provide two commands, that are "help" and "quit". You can now extend the TARS to understand your commands.
+Out of the box, TARS provide two commands, that are "help" and "quit". You can now extend the TARS to understand your commands.
 
 
 How to customize
 ---
 
-You can override the MOTD by creating a new branding file under "~/.tars/branding"
+You can override the MOTD by creating a new branding file under "~/.tars/branding" and also the prompt by adding a configuration file in "~/.tars/config.clj". The configuration file will be loaded while the CLI starts. To override the prompt settings, just add a new definition for the prompt:
+
+```
+(def config {:prompt "tars"})
+```
+

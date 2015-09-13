@@ -14,3 +14,5 @@ pom.xml.asc
 .nrepl*
 *#*
 .DS_Store
+update-doc.sh
+release.sh

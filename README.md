@@ -54,4 +54,25 @@ You can override the MOTD by creating a new branding file under "~/.tars/brandin
 ```
 (def config {:prompt "tars"})
 ```
+How to extend
+---
+To add your own commands just define new methods using defmethod:
 
+```
+(ns test-prj.core
+  (:gen-class)
+  (:require [io.moo.tars.container :as c])
+  (:require [io.moo.tars.commands :as co])
+  (:require [io.moo.tars.rendering :as r]))
+
+(defmethod co/on-start "test" [ params ])
+(defmethod co/on-error "test" [ params ]
+  (r/prints "test failed!" println))
+(defmethod co/exec "test executing" [ commands params ])
+(defmethod co/on-complete "test" [ params ]
+  (r/prints "\ntest completed!\n" print)
+  (:console-action (get co/command-map "test")))
+
+(defn -main [ & args ]
+    (c/start-repl))
+```

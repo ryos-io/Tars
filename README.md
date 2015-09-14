@@ -1,7 +1,7 @@
 ![TARS](http://www.moo.io/img/tars2.jpg)
 ===
 
-<img src="https://travis-ci.org/mooito/tars.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.moo.io/tars/doc/) 
+<img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.moo.io/tars/doc/) 
 
 TARS is a framework, which provides a command-line interface to interact with users of your applications like  CLI clients e.g mongo, mysql, etc. TARS provides a baseline functionality of a CLI.  It even understands a few commands like "help" and "quit". You only need to extend it to make TARS understand your custom commands.
 

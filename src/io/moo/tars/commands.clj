@@ -42,6 +42,11 @@
     "help" {:console-action :CONTINUE,  :desc "\nType 'help' or 'help <command>' to get help."}
     "moo"  {:console-action :CONTINUE,  :desc "\nJust moo!"}})
 
+(def help-data (atom command-map))
+
+(defn add-command-doc [command-name doc]
+  (swap! help-data (assoc command-map command-name doc)))
+
 (defprotocol Command
   (perform [self, command, param]
     "Executes the command logic."))
@@ -61,7 +66,7 @@
 (defmethod exec "quit" [ commands params ])
 (defmethod on-complete "quit" [ params ]
   (r/prints "\nBye!\n" print)
-  (:console-action (get command-map "quit")))
+  (:console-action (get @help-data "quit")))
 
 ;; 'help' command implementation
 (defmethod on-start "help" [ params ])
@@ -70,12 +75,12 @@
 (defmethod exec "help" [ command params ]
   (if (clojure.string/blank? params)
     (println (str "\nPlease provide a command to get help: e.g 'help quit'"))
-  (let [desc (:desc (get command-map params))]
+  (let [desc (:desc (get @help-data params))]
     (if (clojure.string/blank? desc)
       (r/prints (str "\nHelp not found for: '" params "'") println)
       (r/prints desc println)))))
 (defmethod on-complete "help" [ params ]
-  (:console-action (get command-map "help")))
+  (:console-action (get @help-data "help")))
 
 ;; default command implementations
 (defmethod exec :default [ command params ])

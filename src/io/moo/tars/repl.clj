@@ -42,7 +42,7 @@
 ;; Load the configurations from the user's home if the config file exists
 (if (.exists (io/file config-path))
   (load-file config-path)
-  (load-file "src/main/resources/default-config.clj"))
+  (load "/default-config"))
 
 (def current-prompt (atom (:prompt config)))
 

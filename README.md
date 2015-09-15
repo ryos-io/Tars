@@ -56,7 +56,7 @@ You can override the MOTD by creating a new branding file under "~/.tars/brandin
 ```
 How to extend
 ---
-To add your own commands you can use the CLI DSL:
+To add your own commands you can use the TARS DSL:
 
 ```
 (ns test-prj.core

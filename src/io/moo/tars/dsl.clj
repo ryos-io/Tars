@@ -13,7 +13,7 @@
     (defmethod io.moo.tars.commands/exec  ~command [~'arg0 ~'arg1] ~do-on-exec)
     (defmethod io.moo.tars.commands/on-complete ~command [~'arg0] ~do-on-complete)
     (defmethod io.moo.tars.commands/on-error ~command [~'arg0] ~do-on-error)
-    (add-command-doc ~command ~with-documentation)))
+    (io.moo.tars.commands/add-command-doc ~command ~with-documentation)))
 
 (defmacro on-start [f] f)
 (defmacro on-exec  [f] f)

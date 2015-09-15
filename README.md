@@ -19,7 +19,7 @@ To add the CLI into your application just add the dependency and the define the 
 ```
 (defproject your-app "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [io.moo/tars "0.1.0"]]
+                 [io.moo/tars "0.1.4"]]
   :main io.moo.tars.container)
 ```
 

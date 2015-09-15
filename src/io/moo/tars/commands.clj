@@ -45,7 +45,7 @@
 (def help-data (atom command-map))
 
 (defn add-command-doc [command-name doc]
-  (swap! help-data (assoc command-map command-name doc)))
+  (swap! help-data (assoc command-map command-name {:console-action :CONTINUE,  :desc doc})))
 
 (defprotocol Command
   (perform [self, command, param]

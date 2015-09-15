@@ -73,4 +73,5 @@ To add your own commands you can use the CLI DSL:
  "Command Description")
 
 (defn -main [ & args ]
-    (c/start-repl))```
+    (c/start-repl))
+```

@@ -70,7 +70,7 @@ To add your own commands you can use the TARS DSL:
  (on-exec  (println "exec"))
  (on-complete (println "complete"))
  (on-error (println "error"))
- "Command Description")
+ (with-doc "Command Description"))
 
 (defn -main [ & args ]
     (c/start-repl))

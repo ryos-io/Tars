@@ -32,6 +32,9 @@
   (:use io.moo.tars.os.stty)
   (:import [io.moo.tars.commands CommandTemplate]))
 
+;; project version.
+(def project-version (System/getProperty "tars.version"))
+
 ;; Configuration path.
 (def config-path
   (clojure.string/join "/" [user-home relative-path-to-config]))
@@ -61,7 +64,7 @@
 ;; Print out the branding information.
 (defn print-motd []
   "Prints out the MOTD to the console."
-  (r/prints print _R (slurp branding) _R_))
+  (r/prints print _R (clojure.string/replace (slurp branding) #"VERSION" project-version) _R_))
 
 (defn- split-parameters
   "Split parameters in form of command and parameters"

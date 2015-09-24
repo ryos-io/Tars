@@ -23,17 +23,17 @@
 (ns io.moo.tars.rendering)
 
 (defmulti prints
-  (fn [arg, f] (class arg)))
+  (fn [f, & arg] (class arg)))
 
-(defmethod prints :default [arg, f]
+(defmethod prints :default [f, & arg]
   (doseq [item arg] (f item))
   (flush))
 
-(defmethod prints String [arg, f]
+(defmethod prints String [f, & arg]
   (f arg)
   (flush))
 
-(defmethod prints Character [arg, f]
+(defmethod prints Character [f, & arg]
   (f arg)
   (flush))
 

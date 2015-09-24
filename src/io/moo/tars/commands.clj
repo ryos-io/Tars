@@ -62,10 +62,10 @@
 ;; 'quit' command implementation.
 (defmethod on-start "quit" [ params ])
 (defmethod on-error "quit" [ params ]
-  (r/prints "quit failed!" println))
+  (r/prints println "quit failed!"))
 (defmethod exec "quit" [ commands params ])
 (defmethod on-complete "quit" [ params ]
-  (r/prints "\nBye!\n" print)
+  (r/prints print "\nBye!\n")
   (:console-action (get @help-data "quit")))
 
 ;; 'help' command implementation
@@ -77,8 +77,8 @@
     (println (str "\nPlease provide a command to get help: e.g 'help quit'"))
   (let [desc (:desc (get @help-data params))]
     (if (clojure.string/blank? desc)
-      (r/prints (str "\nHelp not found for: '" params "'") println)
-      (r/prints desc println)))))
+      (r/prints println (str "\nHelp not found for: '" params "'"))
+      (r/prints println desc)))))
 (defmethod on-complete "help" [ params ]
   (:console-action (get @help-data "help")))
 
@@ -87,7 +87,7 @@
 (defmethod on-start :default [ params ])
 (defmethod on-error :default [ params ])
 (defmethod on-complete :default [ command ]
-  (r/prints (str "\nUnknown command '" command "'. Type 'help' to get help.") println))
+  (r/prints println (str "\nUnknown command '" command "'. Type 'help' to get help.")))
 
 (deftype CommandTemplate []
   Command

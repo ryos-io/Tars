@@ -61,7 +61,7 @@
 ;; Print out the branding information.
 (defn print-motd []
   "Prints out the MOTD to the console."
-  (r/prints (str _R (slurp branding) _R_) print))
+  (r/prints print _R (slurp branding) _R_))
 
 (defn- split-parameters
   "Split parameters in form of command and parameters"
@@ -74,7 +74,7 @@
 (defn- print-prompt
   "Prints the command prompt."
   []
-  (r/prints (str _B @current-prompt "> " _R_) print))
+  (r/prints print _B @current-prompt "> " _R_))
 
 ;; Removes last character from the string.
 (defmacro remove-last [ txt ]
@@ -87,7 +87,7 @@
   [command-buffer vertical-cursor-pos]
   `(if (not-empty ~command-buffer)
      (do
-       (r/prints "\b \b" print)
+       (r/prints print "\b \b")
        (recur (remove-last ~command-buffer) (dec ~vertical-cursor-pos)))
      (recur ~command-buffer 0)))
 
@@ -152,7 +152,7 @@
      (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
-         (r/prints (nth @command-history @history-cursor) print)
+         (r/prints print (nth @command-history @history-cursor))
          (if (= @history-cursor (dec (count @command-history)))
            (reset! history-cursor 0)
            (reset! history-cursor (inc @history-cursor)))))
@@ -171,7 +171,7 @@
      (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
-         (r/prints command# print)
+         (r/prints print command#)
          (if (> @history-cursor 0)
            (swap! history-cursor dec)
            (reset! history-cursor (dec (count @command-history))))))
@@ -184,7 +184,7 @@
                          vertical-cursor-pos)]
     (if (> curr-pos 0)
       (do
-        (r/prints "\b \b" print)
+        (r/prints print "\b \b")
         (recur (dec curr-pos))))))
 
 ;; Current cursor position in the command history.
@@ -229,5 +229,5 @@
         ;; default case
         :else
         (do
-          (r/prints (char input-char) print)
+          (r/prints print (char input-char))
           (recur (str command-buffer (char input-char)) (inc vertical-cursor-pos)))))))

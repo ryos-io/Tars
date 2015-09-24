@@ -27,6 +27,7 @@
     [io.moo.tars.rendering :as r])
   (:use io.moo.tars.commands)
   (:use io.moo.tars.defs)
+  (:use io.moo.tars.colors)
   (:use [clojure.string :only [split, blank?]])
   (:use io.moo.tars.os.stty)
   (:import [io.moo.tars.commands CommandTemplate]))
@@ -60,7 +61,7 @@
 ;; Print out the branding information.
 (defn print-motd []
   "Prints out the MOTD to the console."
-  (r/prints (slurp branding) print))
+  (r/prints (str _R (slurp branding) _R_) print))
 
 (defn- split-parameters
   "Split parameters in form of command and parameters"
@@ -73,7 +74,7 @@
 (defn- print-prompt
   "Prints the command prompt."
   []
-  (r/prints (str @current-prompt "> ") print))
+  (r/prints (str _B @current-prompt "> " _R_) print))
 
 ;; Removes last character from the string.
 (defmacro remove-last [ txt ]

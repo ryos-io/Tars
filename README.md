@@ -3,7 +3,7 @@
 
 <img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.moo.io/tars/doc/)
 
-TARS is a framework, which provides a command-line interface to interact with users of your applications like  CLI clients e.g mongo, mysql, etc. TARS provides a baseline functionality of a CLI.  It even understands a few commands like "help" and "quit". You only need to extend it to make TARS understand your custom commands.
+TARS is a Clojure framework, that provides a command-line interface for your applications and allows your users to interact through it (like mongo, mysql clients). TARS already understands a few commands like "help" and "quit". You only need to extend it to make TARS understand your custom commands specific to your clients.
 
 + [API Doc](http://www.moo.io/tars/doc/)
 + Twitter: [@ebagdemir](https://twitter.com/ebagdemir)

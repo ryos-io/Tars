@@ -24,7 +24,8 @@
   (:gen-class)
   (:require
     [clojure.java.io :as io]
-    [io.moo.tars.rendering :as r])
+    [io.moo.tars.rendering :as r]
+    [clojure.tools.logging :as log])
   (:use io.moo.tars.commands)
   (:use io.moo.tars.defs)
   (:use io.moo.tars.colors)
@@ -161,16 +162,16 @@
            (reset! history-cursor (inc @history-cursor)))))
      (recur command# (dec command-size#))))
 
-;; Handles the macro the upper arrow keys.
-;; It is used to navigate through the command history.
+;;; Handles the macro the upper arrow keys.
+;;; It is used to navigate through the command history.
 (defmacro handle-up
   [command-buffer vertical-cursor-pos]
   ;; Command is the command will be picked from the history
   ;; everytime we hit the upper arrow key.
-  `(let [command# (if (> (count @command-history) 0)
-                    ;; History cursor is the current pos of the cursor.
-                    (nth @command-history @history-cursor) "")
-         command-size# (count command#)]
+  `(let [command#
+         (if (> (count @command-history) 0)
+           ;; History cursor is the current pos of the cursor.
+           (nth @command-history @history-cursor) "") command-size# (count command#)]
      (if (not-empty @command-history)
        (do
          (clean-command-line ~vertical-cursor-pos ~command-buffer)
@@ -182,9 +183,10 @@
 
 (defn- clean-command-line
   [vertical-cursor-pos command-buffer]
-  (loop [curr-pos (if (> (count command-buffer) vertical-cursor-pos)
-                    (count command-buffer)
-                         vertical-cursor-pos)]
+  (loop [curr-pos
+         (if (> (count command-buffer) vertical-cursor-pos)
+           (count command-buffer)
+           vertical-cursor-pos)]
     (if (> curr-pos 0)
       (do
         (r/prints print "\b \b")
@@ -200,6 +202,7 @@
 (defn repl
   "Read-Eval-Print-Loop implementation."
   []
+  (log/info "Starting REPL")
   (print-prompt)
   (loop [command-buffer nil vertical-cursor-pos 0]
     (let [input-char (.read System/in)]
@@ -225,6 +228,7 @@
         (= input-char ascii-enter)
         (do
           (reset! history-cursor 0)
+          (println "")
           (handle-enter command-buffer input-char))
         ;; On-backspace entered.
         (= input-char ascii-backspace)

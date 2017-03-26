@@ -1,6 +1,6 @@
-(ns io.moo.tars.rendering_test
+(ns io.ryos.tars.rendering_test
   (:use clojure.test)
-  (:require [io.moo.tars.rendering :as renderer]))
+  (:require [io.ryos.tars.rendering :as renderer]))
 
 (def number-of-columns 3)
 

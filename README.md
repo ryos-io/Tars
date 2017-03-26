@@ -22,7 +22,7 @@ To add the CLI into your application just add the dependency and the define the 
 (defproject your-app "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [io.ryos/tars "0.1.5"]]
-  :main io.moo.tars.container)
+  :main io.ryos.tars.container)
 ```
 
 After you run your application by calling:
@@ -63,8 +63,8 @@ To add your own commands you can use the TARS DSL:
 ```
 (ns test-prj.core
   (:gen-class)
-  (:require [io.moo.tars.container :as c])
-  (:use io.moo.tars.dsl))
+  (:require [io.ryos.tars.container :as c])
+  (:use io.ryos.tars.dsl))
 
 ;; add a new command called "test"
 (add-command "test"

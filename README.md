@@ -1,15 +1,15 @@
-![TARS](http://www.moo.io/img/tars2.jpg)
+![TARS](http://www.ryos.io/img/tars2.jpg)
 ===
 
-<img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.moo.io/tars/doc/)
+<img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.ryos.io/tars/doc/)
 <img src="https://img.shields.io/packagist/l/doctrine/orm.svg"/>
 [![GitHub version](https://badge.fury.io/gh/mooito%2FTARS.svg)](https://badge.fury.io/gh/mooito%2FTARS)
 
 TARS is a Clojure framework, that provides a command-line interface for your applications and allows your users to interact through it (like mongo, mysql clients). TARS already understands a few commands like "help" and "quit". You only need to extend it to make TARS understand your custom commands specific to your clients.
 
-+ [API Doc](http://www.moo.io/tars/doc/)
++ [API Doc](http://www.ryos.io/tars/doc/)
 + Twitter: [@ebagdemir](https://twitter.com/ebagdemir)
-+ [GitHub Issues](https://github.com/mooito/tars/issues)
++ [GitHub Issues](https://github.com/ryos-io/tars/issues)
 
 [![Clojars Project](http://clojars.org/io.moo/tars/latest-version.svg)](http://clojars.org/io.moo/tars)
 
@@ -38,7 +38,7 @@ the CLI will be available for user interaction with a default MOTD and prompt. Y
 `||'   |#|
  ||__.-"-"-.___
  `---| . . |--.\     TARS version 0.1.0 [ Type 'help' to get help! ]
-     | : : |  |_|    https://github.com/mooito/tars
+     | : : |  |_|    https://github.com/ryos-io/tars
      `..-..' ( I )
       || ||   | |
       || ||   |_|
@@ -80,7 +80,7 @@ To add your own commands you can use the TARS DSL:
 
 ## Bugs and Feedback
 
-For bugs, questions and discussions please use the [Github Issues](https://github.com/mooito/tars/issues).
+For bugs, questions and discussions please use the [Github Issues](https://github.com/ryos-io/tars/issues).
 
  
 ## LICENSE

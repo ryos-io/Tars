@@ -11,7 +11,7 @@ TARS is a Clojure framework, that provides a command-line interface for your app
 + Twitter: [@ebagdemir](https://twitter.com/ebagdemir)
 + [GitHub Issues](https://github.com/ryos-io/tars/issues)
 
-[![Clojars Project](http://clojars.org/io.moo/tars/latest-version.svg)](http://clojars.org/io.moo/tars)
+[![Clojars Project](https://img.shields.io/clojars/v/io.ryos/tars.svg)](https://clojars.org/io.ryos/tars)
 
 How to use
 ---

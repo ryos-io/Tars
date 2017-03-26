@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ;
-; Copyright (c) 2014 moo.io - Erhan Bagdemir
+; Copyright (c) 2014 ryos.io - Erhan Bagdemir
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +20,21 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.os.stty
-  (:gen-class)
-  (:use clojure.java.shell))
+(ns io.ryos.tars.defs)
 
-(defn turn-char-buffering-on
-  []
-  (sh "sh" "-c" "stty -g < /dev/tty")
-  (sh "sh" "-c" "stty -icanon min 1 < /dev/tty")
-  (sh "sh" "-c" "stty -echo </dev/tty"))
+(def ascii-right 68)
+(def ascii-left 67)
+(def ascii-enter 10)
+(def ascii-up 65)
+(def ascii-down 66)
+(def ascii-escape 27)
+(def ascii-backspace 127)
 
-(defn turn-char-buffering-off
-  []
-  (flush)
-  (sh "sh" "-c" "stty echo </dev/tty"))
+;; Var which points to the user's home.
+(def user-home (System/getProperty "user.home"))
+
+;; Path to the branding file in the user's home.
+(def relative-path-to-branding ".tars/branding")
+
+;; Path to the config file in the user's home.
+(def relative-path-to-config ".tars/config.clj")

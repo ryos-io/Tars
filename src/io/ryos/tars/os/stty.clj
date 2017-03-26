@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ;
-; Copyright (c) 2014 moo.io - Erhan Bagdemir
+; Copyright (c) 2014 ryos.io - Erhan Bagdemir
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,25 +20,17 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.container
-  (:use io.moo.tars.repl
-        io.moo.tars.os.stty)
-  (:gen-class))
+(ns io.ryos.tars.os.stty
+  (:gen-class)
+  (:use clojure.java.shell))
 
-(defn addShutdownHook
-  "Add a function as shutdown hook on JVM exit."
-  [func]
-  (.addShutdownHook (Runtime/getRuntime) (Thread. func)))
-
-(defn start-repl
-  "Starts the repl session"
+(defn turn-char-buffering-on
   []
-  (addShutdownHook (fn [] (turn-char-buffering-off)))
-  (turn-char-buffering-on)
-  (print-motd)
-  (repl)
-  ;;http://dev.clojure.org/jira/browse/CLJ-959
-  (System/exit 0))
+  (sh "sh" "-c" "stty -g < /dev/tty")
+  (sh "sh" "-c" "stty -icanon min 1 < /dev/tty")
+  (sh "sh" "-c" "stty -echo </dev/tty"))
 
-(defn -main [ & args ]
-  (start-repl))
+(defn turn-char-buffering-off
+  []
+  (flush)
+  (sh "sh" "-c" "stty echo </dev/tty"))

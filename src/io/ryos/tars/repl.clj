@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ;
-; Copyright (c) 2014 moo.io - Erhan Bagdemir
+; Copyright (c) 2014 ryos.io - Erhan Bagdemir
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,19 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.repl
+(ns io.ryos.tars.repl
   (:gen-class)
   (:require
-    [clojure.java.io :as io]
-    [io.moo.tars.rendering :as r]
-    [clojure.tools.logging :as log])
-  (:use io.moo.tars.commands)
-  (:use io.moo.tars.defs)
-  (:use io.moo.tars.colors)
+   [clojure.tools.trace]
+   [clojure.java.io :as io]
+   [io.ryos.tars.rendering :as r]
+   [clojure.tools.logging :as log])
+  (:use io.ryos.tars.commands)
+  (:use io.ryos.tars.defs)
+  (:use io.ryos.tars.colors)
   (:use [clojure.string :only [split, blank?]])
-  (:use io.moo.tars.os.stty)
-  (:import [io.moo.tars.commands CommandTemplate]))
+  (:use io.ryos.tars.os.stty)
+  (:import [io.ryos.tars.commands CommandTemplate]))
 
 ;; project version.
 (def project-version (System/getProperty "tars.version"))
@@ -181,16 +182,18 @@
            (reset! history-cursor (dec (count @command-history))))))
      (recur command# (dec command-size#))))
 
-(defn- clean-command-line
-  [vertical-cursor-pos command-buffer]
-  (loop [curr-pos
-         (if (> (count command-buffer) vertical-cursor-pos)
-           (count command-buffer)
-           vertical-cursor-pos)]
-    (if (> curr-pos 0)
+;;; Cleans the command line. Used in up and down arrow actions.
+(defn- ^:dynamic clean-command-line
+  "Cleans up the command line."
+  [cursor-pos command]
+  (loop [new-curr-pos
+         (if (> (count command) cursor-pos)
+           (count command) cursor-pos)]
+    (if (> new-curr-pos 0)
       (do
+        (log/info "command-buffer" command)
         (r/prints print "\b \b")
-        (recur (dec curr-pos))))))
+        (recur (dec new-curr-pos))))))
 
 ;; Current cursor position in the command history.
 ;; It points to the item which is selected by navigating

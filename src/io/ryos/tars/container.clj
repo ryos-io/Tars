@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ;
-; Copyright (c) 2014 moo.io - Erhan Bagdemir
+; Copyright (c) 2014 ryos.io - Erhan Bagdemir
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,25 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.defs)
+(ns io.ryos.tars.container
+  (:use io.ryos.tars.repl
+        io.ryos.tars.os.stty)
+  (:gen-class))
 
-(def ascii-right 68)
-(def ascii-left 67)
-(def ascii-enter 10)
-(def ascii-up 65)
-(def ascii-down 66)
-(def ascii-escape 27)
-(def ascii-backspace 127)
+(defn addShutdownHook
+  "Add a function as shutdown hook on JVM exit."
+  [func]
+  (.addShutdownHook (Runtime/getRuntime) (Thread. func)))
 
-;; Var which points to the user's home.
-(def user-home (System/getProperty "user.home"))
+(defn start-repl
+  "Starts the repl session"
+  []
+  (addShutdownHook (fn [] (turn-char-buffering-off)))
+  (turn-char-buffering-on)
+  (print-motd)
+  (repl)
+  ;;http://dev.clojure.org/jira/browse/CLJ-959
+  (System/exit 0))
 
-;; Path to the branding file in the user's home.
-(def relative-path-to-branding ".tars/branding")
-
-;; Path to the config file in the user's home.
-(def relative-path-to-config ".tars/config.clj")
+(defn -main [ & args ]
+  (start-repl))

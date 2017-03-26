@@ -1,6 +1,6 @@
 ; The MIT License (MIT)
 ;
-; Copyright (c) 2015 moo.io - Erhan Bagdemir
+; Copyright (c) 2015 ryos.io - Erhan Bagdemir
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software axnd associated documentation files (the "Software"), to deal
@@ -20,7 +20,7 @@
 ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ; THE SOFTWARE.
 
-(ns io.moo.tars.colors)
+(ns io.ryos.tars.colors)
 
 (def _R_ "\u001B[0m")
 (def _B "\u001B[30m")

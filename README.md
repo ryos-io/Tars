@@ -1,4 +1,4 @@
-![TARS](http://www.ryos.io/img/tars2.png)
+![TARS](http://www.ryos.io/img/tars2.png =100x)
 ===
 
 <img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.ryos.io/tars/doc/)

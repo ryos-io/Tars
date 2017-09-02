@@ -1,5 +1,6 @@
-![TARS](http://www.ryos.io/img/tars2.png =100x)
+TARS
 ===
+<img src="http://www.ryos.io/img/tars2.png" width="100">
 
 <img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.ryos.io/tars/doc/)
 <img src="https://img.shields.io/packagist/l/doctrine/orm.svg"/>

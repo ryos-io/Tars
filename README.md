@@ -1,6 +1,5 @@
 TARS
 ===
-<img src="http://www.ryos.io/img/tars2.png" width="100">
 
 <img src="https://travis-ci.org/mooito/TARS.svg" /> [![API Documentation](http://b.repl.ca/v1/doc-API-blue.png)](http://www.ryos.io/tars/doc/)
 <img src="https://img.shields.io/packagist/l/doctrine/orm.svg"/>
@@ -10,7 +9,6 @@ TARS
 TARS is a Clojure framework, that provides a command-line interface for your applications and allows your users to interact through it (like mongo, mysql clients). TARS already understands a few commands like "help" and "quit". You only need to extend it to make TARS understand your custom commands specific to your clients.
 
 + [API Doc](http://www.ryos.io/tars/doc/)
-+ Twitter: [@ebagdemir](https://twitter.com/ebagdemir)
 + [GitHub Issues](https://github.com/ryos-io/tars/issues)
 
 
